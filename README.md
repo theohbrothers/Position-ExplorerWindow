@@ -143,9 +143,9 @@ Alternatively, as seen in this demo, you can *pin Powershell onto your Taskbar*,
     
 Q: Help! the Taskbar is overlapping some of my Explorer windows!
 - You are probably an advanced user, using `$ModeEasy = 0`. A Taskbar with a single row of icons is often 40 pixels high (if at top or bottom) or 62 pixels wide (if at left or right). So:
-    > If your Taskbar is on the **bottom**, reduce the `$DestinationScreenHeight` by 62. 
-    If your Taskbar is on the **top**, reduce the `DestinationScreenHeight` by 62, and increase `$OffsetTop` by 62.
-    If your Taskbar is on the **left**, reduce the `DestinationScreenWidth` by 40, and increase `$OffsetLeft` by 40. 
+    > If your Taskbar is on the **bottom**, reduce the `$DestinationScreenHeight` by 62. <br />
+    If your Taskbar is on the **top**, reduce the `DestinationScreenHeight` by 62, and increase `$OffsetTop` by 62. <br />
+    If your Taskbar is on the **left**, reduce the `DestinationScreenWidth` by 40, and increase `$OffsetLeft` by 40.  <br />
     If your Taskbar is on the **right**, reduce the `DestinationScreenWidth` by 40, and reduce `$OffsetLeft` by 40.
     >
     p.s. If your Taskbar is has *two or more rows* of icons, then change the above by multiples of 40 or 62.
