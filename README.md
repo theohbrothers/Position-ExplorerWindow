@@ -9,7 +9,7 @@ Opens, resizes, and arranges multiple `Explorer` windows at specified paths in a
     - [.NET Framework 3.5](https://www.microsoft.com/en-sg/download/details.aspx?id=21 "Microsoft .NET Framework 3.5 Download")
 
 ## Demo
-![Demo](https://github.com/leojonathanoh/Position-Explorer-Window/raw/master/images/preview.gif "Demo of Position-Explorer-Window")
+![Demo](https://github.com/leojonathanoh/Position-Explorer-Window/raw/master/images/preview-demo.gif "Demo of Position-Explorer-Window")
 
 ## How to use
 `Position-Explorer-Window` can be used as a *script*, or a *module*.
