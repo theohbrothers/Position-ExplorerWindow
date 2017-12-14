@@ -141,6 +141,14 @@ Q: I want to open multiple sets of windows quickly. How do I do that?
 Alternatively, as seen in this demo, you can *pin Powershell onto your Taskbar*, then *pin those scripts* by dragging and dropping over the Powershell on the Taskbar. Now you can easily run them by right-clicking on Powershell, and clicking the script. 
 ![Pin Demo](https://github.com/leojonathanoh/Position-Explorer-Window/raw/master/images/pin-demo.gif "Demo of Position-Explorer-Window")
     
+Q: Help! the Taskbar is overlapping some of my Explorer windows!
+- You are probably an advanced user, using `$ModeEasy = 0`. A Taskbar with a single row of icons is often 40 pixels high (if at top or bottom) or 62 pixels wide (if at left or right). So:
+    > If your Taskbar is on the **bottom**, reduce the `$DestinationScreenHeight` by 62. 
+    If your Taskbar is on the **top**, reduce the `DestinationScreenHeight` by 62, and increase `$OffsetTop` by 62.
+    If your Taskbar is on the **left**, reduce the `DestinationScreenWidth` by 40, and increase `$OffsetLeft` by 40. 
+    If your Taskbar is on the **right**, reduce the `DestinationScreenWidth` by 40, and reduce `$OffsetLeft` by 40.
+    >
+    p.s. If your Taskbar is has *two or more rows* of icons, then change the above by multiples of 40 or 62.
 
 Q: Help! I am getting an error <code>'File C:\...Position-Explorer-Window.ps1 cannot be loaded because the execution of scripts is disabled on this system. Please see "get-help about_signing" for more details.'</code>
 - You need to allow the execution of unverified scripts. Open Powershell as administrator, type <code>Set-ExecutionPolicy Unrestricted -Force</code> and press ENTER. Try running the script again. You can easily restore the security setting back by using <code>Set-ExecutionPolicy Undefined -Force</code>.
