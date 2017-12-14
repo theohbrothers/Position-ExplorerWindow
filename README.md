@@ -153,10 +153,7 @@ Q: Help! the Taskbar is overlapping some of my Explorer windows!
 Q: Help! Upon running the script I am getting an error <code>'File C:\...Position-Explorer-Window.ps1 cannot be loaded because the execution of scripts is disabled on this system. Please see "get-help about_signing" for more details.'</code>
 - You need to allow the execution of unverified scripts. Open Powershell as administrator, type <code>Set-ExecutionPolicy Unrestricted -Force</code> and press ENTER. Try running the script again. You can easily restore the security setting back by using <code>Set-ExecutionPolicy Undefined -Force</code>.
 
-Q: Help! Upon running the script I am getting an error <code>File C:\...Position-Explorer-Window.ps1 cannot be loaded. The file 
-C:\...\Position-Explorer-Window.ps1 is not digitally signed. You cannot run 
-this script on the current system. For more information about running scripts and setting 
-execution policy, see about_Execution_Policies at http://go.microsoft.com/fwlink/?LinkID=135170.</code>
+Q: Help! Upon running the script I am getting an error <code>File C:\...Position-Explorer-Windows.ps1 cannot be loaded. The file C:\...\Position-Explorer-Windows.ps1 is not digitally signed. You cannot run this script on the current system. For more information about running scripts and setting execution policy, see about_Execution_Policies at http://go.microsoft.com/fwlink/?LinkID=135170.</code>
 - You need to allow the execution of unverified scripts. Open Powershell as administrator, type <code>Set-ExecutionPolicy Unrestricted -Force</code> and press ENTER. Try running the script again. You can easily restore the security setting back by using <code>Set-ExecutionPolicy Undefined -Force</code>.
 
 
