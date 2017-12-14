@@ -150,7 +150,7 @@ Q: Help! the Taskbar is overlapping some of my Explorer windows!
     >
     p.s. If your Taskbar is has *two or more rows* of icons, then change the above by multiples of 40 or 62.
 
-Q: Help! I am getting an error <code>'File C:\...Position-Explorer-Window.ps1 cannot be loaded because the execution of scripts is disabled on this system. Please see "get-help about_signing" for more details.'</code>
+Q: Help! Upon running the script I am getting an error <code>'File C:\...Position-Explorer-Window.ps1 cannot be loaded because the execution of scripts is disabled on this system. Please see "get-help about_signing" for more details.'</code>
 - You need to allow the execution of unverified scripts. Open Powershell as administrator, type <code>Set-ExecutionPolicy Unrestricted -Force</code> and press ENTER. Try running the script again. You can easily restore the security setting back by using <code>Set-ExecutionPolicy Undefined -Force</code>.
 
 Q: Help! Upon running the script I am getting an error <code>File C:\...Position-Explorer-Window.ps1 cannot be loaded. The file 
