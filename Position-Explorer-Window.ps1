@@ -622,6 +622,7 @@ function Position-Resize-Window {
     }
     $False
 }
+<# END MODULE #>
 
 # Split those paths, removing empty entries
 $Paths = $Paths.Split("`n`r") | Where-Object { $_.Trim() } 

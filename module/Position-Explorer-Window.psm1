@@ -143,7 +143,7 @@
         [int]$ModeEasy = 0
     ,
         [Parameter(Mandatory=$True,Position=1)]
-        [String]$Paths
+        [String[]]$Paths
     ,
         [Parameter(Mandatory=$False,Position=2)]
         #[ValidateRange(640, [int]::MaxValue)]
@@ -153,7 +153,7 @@
         #[ValidateRange(360, [int]::MaxValue)]
 		[Int]$DestinationScreenHeight
 	,
-        [Parameter(Mandatory=$True,Position=4)]
+        [Parameter(Mandatory=$False,Position=4)]
         [ValidateSet('M', 'L', 'R', 'T', 'B')] 
 		[String]$DestinationMonitor = 'M'
 	,
@@ -193,7 +193,7 @@
         $ErrorActionPreference = 'Stop'
 
         # Get all main monitors resolution
-        # Doesn't work for Windows 7
+        # Doesn't work for Windows 7 PSv2
         #$mainMonitor = Get-Wmiobject Win32_Videocontroller
         #$mainMonitorWidth = $mainMonitor.CurrentHorizontalResolution
         #$mainMonitorHeight = $mainMonitor.CurrentVerticalResolution
@@ -202,18 +202,23 @@
         # From: https://stackoverflow.com/questions/7967699/get-screen-resolution-using-wmi-powershell-in-windows-7/7968063#7968063
         # The returned screen objects appears to be in order of the physical position of the monitors, from left to right, 
         #  regardless of what the monitor's ID in Control Panel's / Settings 'Identify' feature shows.
+        Add-Type -AssemblyName System.Windows.Forms
         $screens = [System.Windows.Forms.Screen]::AllScreens
         # Lets get the Main Monitor's resolution
         Write-Host "`n[Detecting Main Monitor Resolution]" -ForegroundColor Cyan
-        $mainMonitor = $screens | ? { $_.Primary } | Select-Object -First 1
+        $mainMonitor = $screens | Where-Object { $_.Primary } | Select-Object -First 1
         if (!$mainMonitor) {
             Write-Error "Unable to auto-detect main monitor's resolution." -ErrorAction $callerEA
             if ($callerEA -eq 'SilentlyContinue' -or $callerEA -eq 'Continue') {
                 exit
             }
         }
-        $mainMonitorWidth = $mainMonitor.Bounds.Width
-        $mainMonitorHeight = $mainMonitor.Bounds.Height
+        # Use working area instead of bounds
+        #$mainMonitorWidth = $mainMonitor.Bounds.Width
+        #$mainMonitorHeight = $mainMonitor.Bounds.Height
+        $mainMonitorWidth = $mainMonitor.WorkingArea.Width
+        $mainMonitorHeight = $mainMonitor.WorkingArea.Height
+
         Write-Host "Main Monitor Resolution: $mainMonitorWidth x $mainMonitorHeight" -ForegroundColor Green
 
         # If using simple mode, then consider the destination screen (i.e. pixel pool) to be the same as the main monitor's resolution
@@ -224,232 +229,239 @@
         
         # Determine number of monitors
         $numMonitors = $screens.Count
-        # Doesn't work on Windows 7
+        # Doesn't work on Windows 7 PSv2
         #$numMonitors = (Get-WmiObject WmiMonitorID -Namespace root\wmi).Count
 
     }
     process {
-        # Split paths, removing empty entries
-        $PathsAll = $Paths.Split("`n`r") | ? { $_.Trim() } 
-        Write-Host "[Position-Explorer-Window options]" -ForegroundColor Cyan
-        Write-Host "Paths: " -ForegroundColor Green
-        $PathsAll | % { Write-Host "`t$($_.Trim())" -ForegroundColor Green }
-        Write-Host "DestinationScreenWidth: $DestinationScreenWidth" -ForegroundColor Green
-        Write-Host "DestinationScreenHeight: $DestinationScreenHeight" -ForegroundColor Green
-        Write-Host "DestinationMonitor: $DestinationMonitor" -ForegroundColor Green
-        Write-Host "Rows: $Rows" -ForegroundColor Green
-        Write-Host "Cols: $Cols" -ForegroundColor Green
-        Write-Host "ForegroundColor: $OffsetLeft" -ForegroundColor Green
-        Write-Host "OffsetTop: $OffsetTop" -ForegroundColor Green
-        Write-Host "Flow: $Flow" -ForegroundColor Green
-        Write-Host "Debug: $DebugLevel" -ForegroundColor Green
+        try {
+            Write-Host "[Position-Explorer-Window options]" -ForegroundColor Cyan
+            Write-Host "Paths: " -ForegroundColor Green
+            $Paths | ForEach-Object { Write-Host " $($_.Trim())" -ForegroundColor Green }
+            Write-Host "DestinationScreenWidth: $DestinationScreenWidth" -ForegroundColor Green
+            Write-Host "DestinationScreenHeight: $DestinationScreenHeight" -ForegroundColor Green
+            Write-Host "DestinationMonitor: $DestinationMonitor" -ForegroundColor Green
+            Write-Host "Rows: $Rows" -ForegroundColor Green
+            Write-Host "Cols: $Cols" -ForegroundColor Green
+            Write-Host "ForegroundColor: $OffsetLeft" -ForegroundColor Green
+            Write-Host "OffsetTop: $OffsetTop" -ForegroundColor Green
+            Write-Host "Flow: $Flow" -ForegroundColor Green
+            Write-Host "Debug: $DebugLevel" -ForegroundColor Green
 
-        # Determine the Window Group Starting Position, each window's dimension
-        Write-Host "`n[Calculating Window Group Starting Position, each window's dimension]" -ForegroundColor Cyan
-        # Determine Window Group Starting Position - Get (x,y) coordinates, where the origin (0,0) is the Top-Left Corner of the Main Monitor
-        if ($numMonitors -eq 1) {
-            # Single-Monitor
-            # Calculate left
-            $left = 0 + $OffsetLeft
+            # Determine the Window Group Starting Position, each window's dimension
+            Write-Host "`n[Calculating Window Group Starting Position, each window's dimension]" -ForegroundColor Cyan
+            # Determine Window Group Starting Position - Get (x,y) coordinates, where the origin (0,0) is the Top-Left Corner of the Main Monitor
+            if ($numMonitors -eq 1) {
+                # Single-Monitor
+                # Calculate left
+                $left = 0 + $OffsetLeft
 
-            # Calculate top
-            $top = 0 + $OffsetTop
-        }elseif ($numMonitors -gt 1) {
-            # Multi-Monitor
-            Switch ($DestinationMonitor) {
-                'M' {
-                    # Its just like Single-Monitor
-                    # Calculate left
-                    $left = 0 + $OffsetLeft
+                # Calculate top
+                $top = 0 + $OffsetTop
+            }elseif ($numMonitors -gt 1) {
+                # Multi-Monitor
+                Switch ($DestinationMonitor) {
+                    'M' {
+                        # Its just like Single-Monitor
+                        # Calculate left
+                        $left = 0 + $OffsetLeft
 
-                    # Calculate top
-                    $top = 0 + $OffsetTop
-                } 
-                'L' {
-                    # Calculate left
-                    $startingPoint = 0 - $DestinationScreenWidth
-                    $left = $startingPoint + $OffsetLeft
+                        # Calculate top
+                        $top = 0 + $OffsetTop
+                    } 
+                    'L' {
+                        # Calculate left
+                        $startingPoint = 0 - $DestinationScreenWidth
+                        $left = $startingPoint + $OffsetLeft
 
-                    # Calculate top
-                    $top = 0 + $OffsetTop
-                }
-                'R' {
-                    # Calculate left
-                    $startingPoint = 0 + $mainMonitorWidth
-                    $left = $startingPoint + $OffsetLeft
+                        # Calculate top
+                        $top = 0 + $OffsetTop
+                    }
+                    'R' {
+                        # Calculate left
+                        $startingPoint = 0 + $mainMonitorWidth
+                        $left = $startingPoint + $OffsetLeft
 
-                    # Calculate top
-                    $top = 0 + $OffsetTop
+                        # Calculate top
+                        $top = 0 + $OffsetTop
 
-                }
-                'T' {
+                    }
+                    'T' {
 
-                    # Calculate left
-                    $left = 0 + $OffsetLeft
+                        # Calculate left
+                        $left = 0 + $OffsetLeft
 
-                    # Calculate top
-                    $startingPoint = 0 - $DestinationScreenHeight
-                    $top = $startingPoint + $OffsetTop 
-                }
-                'B' {
-                    # Calculate left
-                    $left = 0 + $OffsetLeft
+                        # Calculate top
+                        $startingPoint = 0 - $DestinationScreenHeight
+                        $top = $startingPoint + $OffsetTop 
+                    }
+                    'B' {
+                        # Calculate left
+                        $left = 0 + $OffsetLeft
 
-                    # Calculate top
-                    $startingPoint = 0 + $DestinationScreenHeight
-                    $top = $startingPoint + $OffsetTop 
+                        # Calculate top
+                        $startingPoint = 0 + $DestinationScreenHeight
+                        $top = $startingPoint + $OffsetTop 
+                    }
                 }
             }
-        }
-        # Ensure they are integers, or UIAutomation won't position them correctly
-        $left = [math]::Round($left)
-        $top = [math]::Round($top)
+            # Ensure they are integers, or UIAutomation won't position them correctly
+            $left = [math]::Round($left)
+            $top = [math]::Round($top)
 
-        # Determine each window's dimension
-        $my_width = $DestinationScreenWidth / $Cols   # e.g. 1920 / 2
-        $my_height = $DestinationScreenHeight / $Rows # e.g. 1080 / 4
-        Write-Host "NOTE: Origin (0, 0) is the Top-Left Corner of your Main Monitor." -ForegroundColor Green
+            # Determine each window's dimension
+            $my_width = $DestinationScreenWidth / $Cols   # e.g. 1920 / 2
+            $my_height = $DestinationScreenHeight / $Rows # e.g. 1080 / 4
+            Write-Host "NOTE: Origin (0, 0) is the Top-Left Corner of your Main Monitor." -ForegroundColor Green
 
-        Write-Host "Starting Coordinates (left, top): ($left, $top)" -ForegroundColor Green
-        Write-Host "Window Dimensions (width x height): $my_width x $my_height" -ForegroundColor Green
+            Write-Host "Starting Coordinates (left, top): ($left, $top)" -ForegroundColor Green
+            Write-Host "Window Dimensions (width x height): $my_width x $my_height" -ForegroundColor Green
 
-        # Flow Cursor
-        $i = 0
-        # Path count
-        $p = 0
-        $processId = -1
-        Write-Host "`n[Opening Windows]" -ForegroundColor Cyan
-        $my_left = $left
-        $my_top = $top
-        foreach ($Path in $PathsAll) {
-            # Debug
-            Write-Host "`nPath: $Path" -ForegroundColor Cyan
-            $p++
+            # Flow Cursor
+            $i = 0
+            # Path count
+            $p = 0
+            Write-Host "`n[Opening Windows]" -ForegroundColor Cyan
+            $my_left = $left
+            $my_top = $top
+            foreach ($Path in $Paths) {
+                # Debug
+                Write-Host "`nPath: $Path" -ForegroundColor Cyan
+                $p++
 
-            Try {
-                if (! (Test-Path -Path $Path -ErrorAction Stop)) {
-                    Write-Warning "Path does not exist: $Path. Skipping opening a window for this path."
+                Try {
+                    if (! (Test-Path -Path $Path -ErrorAction Stop)) {
+                        Write-Warning "Path does not exist: $Path. Skipping opening a window for this path."
+                        continue
+                    }
+                }Catch {
+                    Write-Warning "Invalid path specified: $Path. Illegal charcters used in path. Skipping opening a window for this path."
                     continue
                 }
-            }Catch {
-                Write-Warning "Invalid path specified: $Path. Illegal charcters used in path. Skipping opening a window for this path."
-                #$_
-                continue
-            }
 
-            if ( $p -gt ($Rows * $Cols) ) {
-                    Write-Warning "Number of windows exceeded rows*cols = $($Rows*$Cols). Increase the number of rows and columns."
-                    Write-Warning "Skipping opening a windows for path: $Path"
-                    continue
-            }
-
-
-            # Determine window position
-            Switch ($Flow) {
-                'Y' {
-                    if ($DebugLevel -band 1) { Write-Host '`tFlow is Y. Calculating coordinates for this window...' }
-                    # Top-Down
-                    # If reached max number of rows: reset the cursor to Starting Position y coordinate, and get next left position
-                    if ($i -eq $Rows) {
-                        $i = 0
-                            $my_left += $my_width
-                    }
-                    $my_top = $top + ($my_height * $i)
+                if ( $p -gt ($Rows * $Cols) ) {
+                        Write-Warning "Number of windows exceeded rows*cols = $($Rows*$Cols). Increase the number of rows and columns."
+                        Write-Warning "Skipping opening a windows for path: $Path"
+                        continue
                 }
-                'X' {
-                    if ($DebugLevel -band 1) { Write-Host '`tFlow is Y. Calculating coordinates for this window...' }
-                    # Left-to-Right
-                    # If reached max number of cols: reset the cursor to Starting Position x coordinate, and get next top position
-                    if ($i -eq $Cols) {
-                        $i = 0
-                        $my_top += $my_height
+
+
+                # Determine window position
+                Switch ($Flow) {
+                    'Y' {
+                        if ($DebugLevel -band 1) { Write-Host '`tFlow is Y. Calculating coordinates for this window...' }
+                        # Top-Down
+                        # If reached max number of rows: reset the cursor to Starting Position y coordinate, and get next left position
+                        if ($i -eq $Rows) {
+                            $i = 0
+                                $my_left += $my_width
+                        }
+                        $my_top = $top + ($my_height * $i)
                     }
-                    $my_left = $left + ($my_width * $i)
+                    'X' {
+                        if ($DebugLevel -band 1) { Write-Host '`tFlow is Y. Calculating coordinates for this window...' }
+                        # Left-to-Right
+                        # If reached max number of cols: reset the cursor to Starting Position x coordinate, and get next top position
+                        if ($i -eq $Cols) {
+                            $i = 0
+                            $my_top += $my_height
+                        }
+                        $my_left = $left + ($my_width * $i)
+                    }
                 }
-            }
 
-            # Debug
-            Write-Host "`tMy Coordinates (left, top): ($my_left, $my_top)"
-            if ($DebugLevel -band 1) { Write-Host "`tMy Dimensions (width, height): $my_width x $my_height" }
+                # Debug
+                Write-Host "`tMy Coordinates (left, top): ($my_left, $my_top)"
+                if ($DebugLevel -band 1) { Write-Host "`tMy Dimensions (width, height): $my_width x $my_height" }
 
-            # We are going to use difference objects of explorer.exe
+                # We are going to use difference objects of explorer.exe
 
-            #################
-            # Start-Process #
-            #################
-            # Start-Process: https://ss64.com/ps/start-process.html
-            # explorer.exe: https://ss64.com/nt/explorer.html
-            # Note: A newly started explorer.exe subsequently spawns a child explorer.exe before killing itself. 
-            # Start a new explorer.exe process and get its pid
-            Write-Host "`tStarting Explorer process..." -ForegroundColor Yellow
-            $parent = Start-Process -FilePath explorer -ArgumentList "/separate,`"$Path`"" -PassThru
-            $parent_pid = $parent.Id
-        
-            # Skip over this path if we didn't get a newly started explorer.exe
-            if (!$parent_pid) { Write-Warning "Could not find parent explorer.exe. Skipping."; Continue }
-
-            # Get the explorer processes before launching
-            Write-Host "`tGetting Explorer processes..." -ForegroundColor Yellow
-            $processes_prev = Get-Process explorer
+                #################
+                # Start-Process #
+                #################
+                # Start-Process: https://ss64.com/ps/start-process.html
+                # explorer.exe: https://ss64.com/nt/explorer.html
+                # Note: A newly started explorer.exe subsequently spawns a child explorer.exe before killing itself. 
+                # Start a new explorer.exe process and get its pid
+                Write-Host "`tStarting Explorer process..." -ForegroundColor Yellow
+                $parent = Start-Process -FilePath explorer -ArgumentList "/separate,`"$Path`"" -PassThru
+                $parent_pid = $parent.Id
             
-            # Skip over this path if we didn't get any explorer instances.
-            if (!$processes_prev) { Write-Warning "No explorer.exe instances found. Quitting."; Exit }
-            if ($DebugLevel -band 1) { $processes_prev | Format-Table | Out-String | % { Write-Host $_.Trim() } }
+                # Skip over this path if we didn't get a newly started explorer.exe
+                if (!$parent_pid) { Write-Warning "Could not find parent explorer.exe. Skipping."; Continue }
 
-
-            # Get the pid of the spawned child explorer.exe. This is achieved by getting a diff-object of explorer.exe processes until we find the spawned child's pid
-            Write-Host "`tGetting spawned child process..." -ForegroundColor Yellow
-            
-            
-            # Loop count
-            $x = 1
-            $child_pid = $NULL
-            while($child_pid -eq $NULL) {
-                $x++
-
-                # Get explorer processes after starting the new explorer process
-                if ($DebugLevel -band 1) { Write-Host "`t`tGetting Explorer processes..." -ForegroundColor Yellow }
-                $processes_after = Get-Process explorer
-                if ($DebugLevel -band 1) { $processes_prev | Format-Table | Out-String | Write-Host }
-
-                # Get the child process id from the difference object between two collections of explorer.exe 
-                # E.g.
-                #  Loop 0: $NULL
-                #  Loop 1: 7972
-                $child_pid = $(Compare-Object $processes_prev $processes_after -Property Id  | ? { $_.sideindicator -eq '=>'}).Id
-                if ($DebugLevel -band 1) { Write-Host "`t`t >Diff: $child_pid" }
-
-                # Stop looping if we can't find it
-                if ($x -gt 1000) { "We took too many loops($x) to find the child explorer process."; break }
+                # Get the explorer processes before launching
+                Write-Host "`tGetting Explorer processes..." -ForegroundColor Yellow
+                $processes_prev = Get-Process explorer
                 
-                # Successfully found a child process id. Print a message
-                if ($child_pid) { 
-                    if ($DebugLevel -band 1) { Write-Host "`tWe took $x loops to get the child process id: $child_pid" -ForegroundColor Green }
-                    Write-Host "`tWe found the child process" -ForegroundColor Green 
+                # Skip over this path if we didn't get any explorer instances.
+                if (!$processes_prev) { Write-Warning "No explorer.exe instances found. Quitting."; Exit }
+                if ($DebugLevel -band 1) { $processes_prev | Format-Table | Out-String | % { Write-Host $_.Trim() } }
+
+
+                # Get the pid of the spawned child explorer.exe. This is achieved by getting a diff-object of explorer.exe processes until we find the spawned child's pid
+                Write-Host "`tGetting spawned child process..." -ForegroundColor Yellow
+                
+                # Loop count
+                $x = 0
+                $child_pid = $NULL
+                while($child_pid -eq $NULL) {
+                    $x++
+
+                    # Get explorer processes after starting the new explorer process
+                    if ($DebugLevel -band 1) { Write-Host "`t`tGetting Explorer processes..." -ForegroundColor Yellow }
+                    $processes_after = Get-Process explorer
+                    if ($DebugLevel -band 1) { $processes_prev | Format-Table | Out-String | Write-Host }
+
+                    # Get the child process id from the difference object between two collections of explorer.exe 
+                    # E.g.
+                    #  Loop 0: $NULL
+                    #  Loop 1: 7972
+                    $child_pid = $(Compare-Object $processes_prev $processes_after -Property Id  | Where-Object { $_.sideindicator -eq '=>'}).Id
+                    if ($DebugLevel -band 1) { Write-Host "`t`t >Diff: $child_pid" }
+
+                    # Successfully found a child process id. Print a message
+                    if ($child_pid) { 
+                        if ($DebugLevel -band 1) { Write-Host "`tWe took $x loops to get the child process id: $child_pid" -ForegroundColor Green }
+                        Write-Host "`tWe found the child process" -ForegroundColor Green 
+                    }
+
+                    $SleepMilliseconds = 10
+                    # Stop looping if we can't find it
+                    if ($x -gt 100) { 
+                        if ($DebugLevel -band 1) { 
+                            Write-Host "We took too many loops($x) and $( $x * $SleepMilliseconds )ms and to find the child explorer process." -ForegroundColor Yellow
+                        }
+                        break 
+                    }
+                    Start-Sleep -Milliseconds $SleepMilliseconds
                 }
-            }
 
-            if ($child_pid) {
-                # Give some time before positioning and resizing window
-                Start-Sleep -Milliseconds 100
+                if ($child_pid) {
+                    # Give some time before positioning and resizing window
+                    Start-Sleep -Milliseconds 100
 
-                # Try and reposition and resize Window
-                Write-Host "`tRepositioning and Resizing window..." -ForegroundColor Green
-                    
-                $success = Position-Resize-Window -ProcessId $child_pid -Left $my_left -Top $my_top -Width $my_width -Height $my_height
-                if ($success) {
-                    Write-Host "`tSuccessfully repositioned and resized window." -ForegroundColor Green
+                    # Try and reposition and resize Window
+                    Write-Host "`tRepositioning and Resizing window..." -ForegroundColor Green
+                        
+                    $success = Position-Resize-Window -ProcessId $child_pid -Left $my_left -Top $my_top -Width $my_width -Height $my_height
+                    if ($success) {
+                        Write-Host "`tSuccessfully repositioned and resized window." -ForegroundColor Green
 
-                    # increment cursor
-                    $i++
+                        # increment cursor
+                        $i++
+                    }else {
+                        Write-Warning "Failed to reposition and resize window. The window is not movable or not resizable."
+                    }
                 }else {
-                    Write-Warning "Failed to reposition and resize window. The window is not movable or not resizable."
+                    Write-Warning "Could not find a child explorer.exe instance. Unable to position and resize a new Explorer window for path: $Path"
                 }
-            }else {
-                Write-Warning "Could not find a child explorer.exe instance. Skipping over opening a window for path: $Path"
-            }
-        } # End paths loop
+            } # End paths loop
+        }catch {
+            Write-Error "Error occured running script: $($_.Exception.Message)" -ErrorAction $CallerEA
+        }
     }
+    # End process #
 }
 
 function Position-Resize-Window {
@@ -484,5 +496,6 @@ function Position-Resize-Window {
     }
     $False
 }
+
 
 Export-ModuleMember -Function Position-Explorer-Window
