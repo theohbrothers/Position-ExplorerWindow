@@ -279,7 +279,7 @@ function Position-Explorer-Window {
         #[ValidateRange(360, [int]::MaxValue)]
 		[Int]$DestinationScreenHeight
 	,
-        [Parameter(Mandatory=$True,Position=4)]
+        [Parameter(Mandatory=$False,Position=4)]
         [ValidateSet('M', 'L', 'R', 'T', 'B')] 
 		[String]$DestinationMonitor = 'M'
 	,

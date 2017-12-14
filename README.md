@@ -80,19 +80,22 @@ This method is only for advanced users.
 ### Module Command line
 ```powershell 
 SYNTAX
-    Position-Explorer-Window [[-ModeEasy] <Int32>] [-Paths] <String[]> [[-DestinationScreenWidth] <Int32>] [[-DestinationScreenHeight] <Int32>] [-DestinationMonitor] <String> [[-Rows] <Int32>] [[-Cols]
+    Position-Explorer-Window [[-ModeEasy] <Int32>] [-Paths] <String[]> [[-DestinationScreenWidth] <Int32>] [[-DestinationScreenHeight] <Int32>] [[-DestinationMonitor] <String>] [[-Rows] <Int32>] [[-Cols]
     <Int32>] [[-OffsetLeft] <Int32>] [[-OffsetTop] <Int32>] [[-Flow] <String>] [[-DebugLevel] <Int32>] [<CommonParameters>]
 
 PARAMETERS
     -ModeEasy <Int32>
         In this mode, most defaults are used.
+
     -Paths <String[]>
         The paths (folders) the Explorer windows should show.
+
     -DestinationScreenWidth <Int32>
         Width of resolution of the Destination Screen (think of this as block of pixels, and not necesarily a Monitor's resolution) where the Explorer windows will reside.
 
     -DestinationScreenHeight <Int32>
         Height of resolution of the Destination Screen (think of this as block of pixels, and not necesarily a Monitor's resolution) where the Explorer windows will reside.
+
     -DestinationMonitor <String>
         Physical position of the Destination Monitor where the Explorer windows will open
 
