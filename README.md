@@ -153,10 +153,17 @@ Q: Help! the Taskbar is overlapping some of my Explorer windows!
 Q: Help! I am getting an error <code>'File C:\...Position-Explorer-Window.ps1 cannot be loaded because the execution of scripts is disabled on this system. Please see "get-help about_signing" for more details.'</code>
 - You need to allow the execution of unverified scripts. Open Powershell as administrator, type <code>Set-ExecutionPolicy Unrestricted -Force</code> and press ENTER. Try running the script again. You can easily restore the security setting back by using <code>Set-ExecutionPolicy Undefined -Force</code>.
 
+Q: Help! Upon running the script I am getting an error <code>File C:\...Position-Explorer-Window.ps1 cannot be loaded. The file 
+C:\...\Position-Explorer-Window.ps1 is not digitally signed. You cannot run 
+this script on the current system. For more information about running scripts and setting 
+execution policy, see about_Execution_Policies at http://go.microsoft.com/fwlink/?LinkID=135170.</code>
+- You need to allow the execution of unverified scripts. Open Powershell as administrator, type <code>Set-ExecutionPolicy Unrestricted -Force</code> and press ENTER. Try running the script again. You can easily restore the security setting back by using <code>Set-ExecutionPolicy Undefined -Force</code>.
+
+
 Q: Help! Upon running the script I am getting a warning <code>'Execution Policy change. The execution policy helps protect you from scripts that you do not trust. Changing the execution policy might expose you to the security risks described in the about_Execution_Policies help topic at http://go.microsoft.com/?LinkID=135170. Do you want to change the execution policy?</code>
 - You need to allow the execution of unverified scripts. Type <code>Y</code> for yes and press enter. You can easily restore the security setting back opening Powershell as administrator, and using the code <code>Set-ExecutionPolicy Undefined -Force</code>.
 
-Q: Help! While running a script, an I am getting an error `import-module : Could not load file or assembly 'file:///C:\Users\user\Documents\WindowsPowerShell\Modules\UIAutomation\UIAutomation.dll' or one of its dependencies.
+Q: Help! While running a script, an I am getting an error `import-module : Could not load file or assembly 'file:///C:\..\Documents\WindowsPowerShell\Modules\UIAutomation\UIAutomation.dll' or one of its dependencies.
 Operation is not supported. (Exception from HRESULT: 0x80131515)`
 - You need to install [.NET Framework 3.5](https://www.microsoft.com/en-sg/download/details.aspx?id=21 "Microsoft .NET Framework 3.5 Download"), which is required by the `UIAutomation` module that this script relies on. Once installed, try again.
 ## Known issues
