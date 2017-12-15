@@ -125,13 +125,14 @@ PARAMETERS
 ```
 
 ### Capturing output
-Because of the pipelining nature of `Powershell`, the `stdout` is used for returning objects. To capture streams that output the script's progress, capture them with `*>&1` operator:
+Because of the pipelining nature of `Powershell`, the `stdout` is used for returning objects. 
+To capture streams that output the script's progress, use `*>&1` operator when calling `Position-Explorer-Window` as a *module*, or `>` when calling `Log-Rotate` as a *script*.
 ```powershell
 # If using as a module
 Position-Explorer-Window -ConfigAsString $myConfig -Verbose *>&1 | Out-File -FilePath ./output.log
 
 # If using as a script
-Powershell .\Position-Explorer-Window.ps1 *>&1 > output.log
+Powershell .\Position-Explorer-Window.ps1 > output.log
 ```
 
 ## FAQ 

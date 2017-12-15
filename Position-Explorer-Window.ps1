@@ -310,9 +310,13 @@ function Position-Explorer-Window {
     
     begin {
         # Import-Module
-        Import-Module UIAutomation
-        [UIAutomation.Preferences]::HighlightParent = $False
-        [UIAutomation.Preferences]::Highlight = $False
+        try {
+            Import-Module UIAutomation -ErrorAction Stop
+            [UIAutomation.Preferences]::HighlightParent = $False
+            [UIAutomation.Preferences]::Highlight = $False
+        }catch {
+            throw $_.Exception.Message
+        }
 
         # Error preference
         $callerEA = $ErrorActionPreference
@@ -334,10 +338,8 @@ function Position-Explorer-Window {
         Write-Host "`n[Detecting Main Monitor Resolution]" -ForegroundColor Cyan
         $mainMonitor = $screens | Where-Object { $_.Primary } | Select-Object -First 1
         if (!$mainMonitor) {
-            Write-Error "Unable to auto-detect main monitor's resolution." -ErrorAction $callerEA
-            if ($callerEA -eq 'SilentlyContinue' -or $callerEA -eq 'Continue') {
-                exit
-            }
+            Write-Warning "Unable to auto-detect main monitor's resolution."
+            throw "Unable to auto-detect main monitor's resolution."
         }
         # Use working area instead of bounds
         #$mainMonitorWidth = $mainMonitor.Bounds.Width
