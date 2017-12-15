@@ -3,10 +3,8 @@
 Opens, resizes, and arranges multiple `Explorer` windows at specified paths in a *grid* fashion to fit a screen, or multiple screens.
 
 ## Requirements:
-- Windows environment
+- Windows 7 and up
 - Powershell v2
-- [UIAutomation Powershell Module](https://uiautomation.codeplex.com/releases/view/125358 "UIAutomation Powershell Module Download")
-    - [.NET Framework 3.5](https://www.microsoft.com/en-sg/download/details.aspx?id=21 "Microsoft .NET Framework 3.5 Download")
 
 ## Demo
 ![Demo](https://github.com/leojonathanoh/Position-Explorer-Window/raw/master/images/preview-demo.gif "Demo of Position-Explorer-Window")
@@ -161,9 +159,6 @@ Q: Help! Upon running the script I am getting an error <code>File C:\...Position
 Q: Help! Upon running the script I am getting a warning <code>'Execution Policy change. The execution policy helps protect you from scripts that you do not trust. Changing the execution policy might expose you to the security risks described in the about_Execution_Policies help topic at http://go.microsoft.com/?LinkID=135170. Do you want to change the execution policy?</code>
 - You need to allow the execution of unverified scripts. Type <code>Y</code> for yes and press enter. You can easily restore the security setting back opening Powershell as administrator, and using the code <code>Set-ExecutionPolicy Undefined -Force</code>.
 
-Q: Help! While running a script, an I am getting an error `import-module : Could not load file or assembly 'file:///C:\..\Documents\WindowsPowerShell\Modules\UIAutomation\UIAutomation.dll' or one of its dependencies.
-Operation is not supported. (Exception from HRESULT: 0x80131515)`
-- You need to install [.NET Framework 3.5](https://www.microsoft.com/en-sg/download/details.aspx?id=21 "Microsoft .NET Framework 3.5 Download"), which is required by the `UIAutomation` module that this script relies on. Once installed, try again.
 ## Known issues
 - Nil
 

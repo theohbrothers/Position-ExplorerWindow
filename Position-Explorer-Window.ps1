@@ -309,14 +309,15 @@ function Position-Explorer-Window {
     )
     
     begin {
-        # Import-Module
-        try {
-            Import-Module UIAutomation -ErrorAction Stop
-            [UIAutomation.Preferences]::HighlightParent = $False
-            [UIAutomation.Preferences]::Highlight = $False
-        }catch {
-            throw $_.Exception.Message
-        }
+        # NOTE: No longer using UIAutomation Module.
+        # Import Dependency - UIAutomation Module 
+        #try {
+        #    Import-Module UIAutomation -ErrorAction Stop
+        #    [UIAutomation.Preferences]::HighlightParent = $False
+        #    [UIAutomation.Preferences]::Highlight = $False
+        #}catch {
+        #    throw $_.Exception.Message
+        #}
 
         # Error preference
         $callerEA = $ErrorActionPreference
@@ -434,12 +435,12 @@ function Position-Explorer-Window {
                 }
             }
             # Ensure they are integers, or UIAutomation won't position them correctly
-            $left = [math]::Round($left)
-            $top = [math]::Round($top)
+            $left = [math]::Floor($left)
+            $top = [math]::Floor($top)
 
             # Determine each window's dimension
-            $my_width = $DestinationScreenWidth / $Cols   # e.g. 1920 / 2
-            $my_height = $DestinationScreenHeight / $Rows # e.g. 1080 / 4
+            $my_width = [math]::Floor( $DestinationScreenWidth / $Cols )   # e.g. 1920 / 2
+            $my_height = [math]::Floor( $DestinationScreenHeight / $Rows ) # e.g. 1080 / 4
             Write-Host "NOTE: Origin (0, 0) is the Top-Left Corner of your Main Monitor." -ForegroundColor Green
 
             Write-Host "Starting Coordinates (left, top): ($left, $top)" -ForegroundColor Green
@@ -534,12 +535,13 @@ function Position-Explorer-Window {
                 $x = 0
                 $child_pid = $NULL
                 while($child_pid -eq $NULL) {
+                    $SleepMilliseconds = 10
                     $x++
 
                     # Get explorer processes after starting the new explorer process
                     if ($DebugLevel -band 1) { Write-Host "`t`tGetting Explorer processes..." -ForegroundColor Yellow }
                     $processes_after = Get-Process explorer
-                    if ($DebugLevel -band 1) { $processes_prev | Format-Table | Out-String | Write-Host }
+                    if ($DebugLevel -band 1) { $processes_after | Format-Table | Out-String | Write-Host }
 
                     # Get the child process id from the difference object between two collections of explorer.exe 
                     # E.g.
@@ -554,7 +556,6 @@ function Position-Explorer-Window {
                         Write-Host "`tWe found the child process" -ForegroundColor Green 
                     }
 
-                    $SleepMilliseconds = 10
                     # Stop looping if we can't find it
                     if ($x -gt 100) { 
                         if ($DebugLevel -band 1) { 
@@ -615,14 +616,92 @@ function Position-Resize-Window {
         [int]$Height
     )
 
+    # NOTE: No longer using UIAutomation Module.
     # Get UIA object from process id, and manipulate its position and size
-    $w = Get-UiaWindow -ProcessId $processId
-    if ($w.CanMove -and $w.CanResize) {
-        $w.move($left, $top) | Out-Null
-        $w.Resize($width, $height) | Out-Null  
-        $True
+    #$w = Get-UiaWindow -ProcessId $processId
+    #if ($w.CanMove -and $w.CanResize) {
+    #    $w.move($left, $top) | Out-Null
+    #    $w.Resize($width, $height) | Out-Null  
+    #    $True
+    #}
+
+    # Using PInvoke:
+    # http://www.pinvoke.net/default.aspx/user32.getwindowrect
+    # http://www.pinvoke.net/default.aspx/user32.getclientrect
+    # http://www.pinvoke.net/default.aspx/user32.movewindow
+    # https://gist.github.com/coldnebo/1148334
+    Add-Type '
+        using System;
+        using System.Runtime.InteropServices;
+        
+        public class Win32 {
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+        
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+        
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+        }
+        
+        public struct RECT
+        {
+            public int Left;        // x position of upper-left corner
+            public int Top;         // y position of upper-left corner
+            public int Right;       // x position of lower-right corner
+            public int Bottom;      // y position of lower-right corner
+        }
+    '
+
+    # Keep trying to move the window until we are successful.
+    if ($DebugLevel -band 1) { Write-Host "`t`tAttempting to move window......" -ForegroundColor Yellow }
+    $x = 0
+    while (!$result) {
+        $SleepMilliseconds = 10
+        $x++
+
+        # Get et the process handle
+        $handle = (Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Id -eq $ProcessId } | Select-Object -First 1).MainWindowHandle
+        if ($handle) {
+            # Debug
+            if ($DebugLevel -band 1) {
+                Write-Host "`t`Getting window handle......" -ForegroundColor Yellow
+                Write-Host "`t`tProcessId: $ProcessId handle: $handle"
+                $window = New-Object RECT
+                $client = New-Object RECT
+                [Win32]::GetWindowRect($handle, [ref]$window) | Out-Null
+                [Win32]::GetClientRect($handle, [ref]$client) | Out-Null
+                Write-Host "`t`twindow Left: $($window.Left), Top: $($window.Top), Right: $($window.Right), Bottom: $($window.Bottom)"
+                Write-Host "`t`tclient Left: $($client.Left), Top: $($client.Top), Right: $($client.Right), Bottom: $($client.Bottom)"
+            }
+
+            # Draw it once far away, then draw it on its location. This makes the flicker less apparent
+            $result = [Win32]::MoveWindow($handle, $Left, ($Top - 10000), $Width, $Height, $true) -and [Win32]::MoveWindow($handle, $Left, $Top, $Width, $Height, $true)
+            if ($result) {
+                # Successfully moved and sized window
+                return $true
+            }
+
+            # Stop looping if we failed too many times
+            if ($x -gt 100) { 
+                if ($DebugLevel -band 1) { 
+                    Write-Host "We took too many loops($x) and $( $x * $SleepMilliseconds )ms to position and resize a window." -ForegroundColor Yellow
+                }
+                break 
+            }
+        }
+        Start-Sleep -Milliseconds $SleepMilliseconds
     }
-    $False
+    if (!$result) {
+        Write-Host "Failed to get window handle! Loop count: $x"
+    }
+
+    $false
+
 }
 <# END MODULE #>
 
