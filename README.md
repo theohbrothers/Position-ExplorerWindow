@@ -135,8 +135,11 @@ Powershell .\Position-Explorer-Window.ps1 > output.log
 
 ## FAQ 
 ### WinNT
+Q: Help! When I right-click the script and click *'Run with Powershell'*, it opens and closes in a split second. What's going on?
+- You probably are seeing a *red colored error message* in the window just before it disappears. You need to allow the execution of unverified scripts. Open Powershell as administrator, type `Set-ExecutionPolicy Unrestricted -Force` and press ENTER. Try running the script again. You can easily restore the security setting back by using `Set-ExecutionPolicy Undefined -Force`.
+
 Q: I want to open multiple sets of windows quickly. How do I do that?
-- Simply make copies of this script for each set of `Explorer` windows you want to open. Configure each script with a set of `$Paths`. Keep the scripts on your Desktop. You can now easily run those scripts, by right-clicking and selecting *Run with Powershell*.
+- Simply make a copy of this script for each set of *Explorer* windows you want to open. Configure each script with a set of `$Paths`. Keep the scripts on your Desktop. You can now easily run those scripts, by right-clicking and selecting *'Run with Powershell'*.
 Alternatively, as seen in this demo, you can *pin Powershell onto your Taskbar*, then *pin those scripts* by dragging and dropping over the Powershell on the Taskbar. Now you can easily run them by right-clicking on Powershell, and clicking the script. 
 ![Pin Demo](https://github.com/leojonathanoh/Position-Explorer-Window/raw/master/images/pin-demo.gif "Demo of Position-Explorer-Window")
     
