@@ -1,6 +1,6 @@
 ﻿#########################################################################################################
 # - Be sure to allow execution of Powershell scripts. Open Powershell as Administrator, and paste the following and press ENTER:
-#     Set-ExecutionPolicy Bypass -Force
+#     Set-ExecutionPolicy Unrestricted -Force
 # - Now you're all set.
 #########################################################################################################
 

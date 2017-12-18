@@ -74,6 +74,7 @@ This method is only for advanced users.
     # Call with params splatting
     Position-Explorer-Window @params
     ```
+
 ## Advanced information
 ### Module Command line
 ```powershell 
@@ -134,6 +135,7 @@ Powershell .\Position-Explorer-Window.ps1 > output.log
 ```
 
 ## FAQ 
+
 ### WinNT
 Q: Help! When I right-click the script and click *'Run with Powershell'*, it opens and closes in a split second. What's going on?
 - You probably are seeing a *red colored error message* in the window just before it disappears. You need to allow the execution of unverified scripts. Open Powershell as administrator, type `Set-ExecutionPolicy Unrestricted -Force` and press ENTER. Try running the script again. You can easily restore the security setting back by using `Set-ExecutionPolicy Undefined -Force`.
