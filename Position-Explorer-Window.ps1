@@ -1,15 +1,5 @@
 ﻿#########################################################################################################
-# Dependencies:                                                                                       
-# UIAutomation PS module: https://uiautomation.codeplex.com/wikipage?title=Installation&referringTitle=Documentation
-# - To install it UIAutomation, download the module from that link, extract the contents in the .zip into the folder C:\Users\Me\Documents\WindowsPowerShell\Modules\UiAutomation\
-# - The directory structure should now look like:
-#    C:\Users\Me\Documents\WindowsPowerShell\Modules\UiAutomation\
-#       +-- Castle.Core.dll
-#       +-- Castle.Core.xml
-#       +-- ....
-#       +-- ....
-# - Next, install .NET framework 3.5: https://www.microsoft.com/en-sg/download/details.aspx?id=21 (required for UIAutomation)
-# - Now, allow execution of Powershell scripts. Open Powershell as Administrator, and paste the following and press ENTER:
+# - Be sure to allow execution of Powershell scripts. Open Powershell as Administrator, and paste the following and press ENTER:
 #     Set-ExecutionPolicy Bypass -Force
 # - Now you're all set.
 #########################################################################################################
