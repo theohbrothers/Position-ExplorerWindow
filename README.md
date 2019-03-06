@@ -77,7 +77,7 @@ This method is only for advanced users.
 
 ## Advanced information
 ### Module Command line
-```powershell 
+```powershell
 SYNTAX
     Position-Explorer-Window [[-ModeEasy] <Int32>] [-Paths] <String[]> [[-DestinationScreenWidth] <Int32>] [[-DestinationScreenHeight] <Int32>] [[-DestinationMonitor] <String>] [[-Rows] <Int32>] [[-Cols]
     <Int32>] [[-OffsetLeft] <Int32>] [[-OffsetTop] <Int32>] [[-Flow] <String>] [[-DebugLevel] <Int32>] [<CommonParameters>]
@@ -124,8 +124,8 @@ PARAMETERS
 ```
 
 ### Capturing output
-Because of the pipelining nature of `Powershell`, the `stdout` is used for returning objects. 
-To capture streams that output the script's progress, use `*>&1` operator when calling `Position-Explorer-Window` as a *module*, or `>` when calling `Log-Rotate` as a *script*.
+Because of the pipelining nature of `Powershell`, the `stdout` is used for returning objects.
+To capture streams that output the script's progress, use `*>&1` operator when calling `Position-Explorer-Window` as a *module*, or `>` when calling `Position-Explorer-Window` as a *script*.
 ```powershell
 # If using as a module
 Position-Explorer-Window -ConfigAsString $myConfig -Verbose *>&1 | Out-File -FilePath ./output.log
@@ -134,7 +134,7 @@ Position-Explorer-Window -ConfigAsString $myConfig -Verbose *>&1 | Out-File -Fil
 Powershell .\Position-Explorer-Window.ps1 > output.log
 ```
 
-## FAQ 
+## FAQ
 
 ### WinNT
 Q: Help! When I right-click the script and click *'Run with Powershell'*, it opens and closes in a split second. What's going on?
@@ -142,9 +142,9 @@ Q: Help! When I right-click the script and click *'Run with Powershell'*, it ope
 
 Q: I want to open multiple sets of windows quickly. How do I do that?
 - Simply make a copy of this script for each set of *Explorer* windows you want to open. Configure each script with a set of `$Paths`. Keep the scripts on your Desktop. You can now easily run those scripts, by right-clicking and selecting *'Run with Powershell'*.
-Alternatively, as seen in this demo, you can *pin Powershell onto your Taskbar*, then *pin those scripts* by dragging and dropping over the Powershell on the Taskbar. Now you can easily run them by right-clicking on Powershell, and clicking the script. 
+Alternatively, as seen in this demo, you can *pin Powershell onto your Taskbar*, then *pin those scripts* by dragging and dropping over the Powershell on the Taskbar. Now you can easily run them by right-clicking on Powershell, and clicking the script.
 ![Pin Demo](https://github.com/leojonathanoh/Position-Explorer-Window/raw/master/images/pin-demo.gif "Demo of Position-Explorer-Window")
-    
+
 Q: Help! the Taskbar is overlapping some of my Explorer windows!
 - You are probably an advanced user, using `$ModeEasy = 0`. A Taskbar with a single row of icons is often 40 pixels high (if at top or bottom) or 62 pixels wide (if at left or right). So:
     > If your Taskbar is on the **bottom**, reduce the `$DestinationScreenHeight` by 40. <br />
