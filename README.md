@@ -1,4 +1,4 @@
-# Position-Explorer-Window
+# Position-ExplorerWindow
 
 Opens, resizes, and arranges multiple `Explorer` windows at specified paths in a *grid* fashion to fit a screen, or multiple screens.
 
@@ -7,13 +7,13 @@ Opens, resizes, and arranges multiple `Explorer` windows at specified paths in a
 - Powershell v2
 
 ## Demo
-![Demo](https://github.com/leojonathanoh/Position-Explorer-Window/raw/master/images/preview-demo.gif "Demo of Position-Explorer-Window")
+![Demo](https://github.com/leojonathanoh/Position-ExplorerWindow/raw/master/images/preview-demo.gif "Demo of Position-ExplorerWindow")
 
 ## Usage
 
 ### As a Module
 
-1. [Install](https://msdn.microsoft.com/en-us/library/dd878350(v=vs.85).aspx) the `Position-Explorer-Window.psm1` module into **any** of the following directories:
+1. [Install](https://msdn.microsoft.com/en-us/library/dd878350(v=vs.85).aspx) the `Position-ExplorerWindow.psm1` module into **any** of the following directories:
     ```powershell
     %Windir%\System32\WindowsPowerShell\v1.0\Modules
 
@@ -25,7 +25,7 @@ Opens, resizes, and arranges multiple `Explorer` windows at specified paths in a
 
 2. Import the module, then pipe the config into the module:
     ```powershell
-    Import-Module Position-Explorer-Window
+    Import-Module Position-ExplorerWindow
 
     # Build the params
     $params = @{
@@ -42,14 +42,14 @@ Opens, resizes, and arranges multiple `Explorer` windows at specified paths in a
         'DebugLevel' = $DebugLevel
     }
     # Call with params splatting
-    Position-Explorer-Window @params
+    Position-ExplorerWindow @params
     ```
 
 ## Advanced information
 ### Module Command line
 ```powershell
 SYNTAX
-    Position-Explorer-Window [[-ModeEasy] <Int32>] [-Paths] <String[]> [[-DestinationScreenWidth] <Int32>] [[-DestinationScreenHeight] <Int32>] [[-DestinationMonitor] <String>] [[-Rows] <Int32>] [[-Cols]
+    Position-ExplorerWindow [[-ModeEasy] <Int32>] [-Paths] <String[]> [[-DestinationScreenWidth] <Int32>] [[-DestinationScreenHeight] <Int32>] [[-DestinationMonitor] <String>] [[-Rows] <Int32>] [[-Cols]
     <Int32>] [[-OffsetLeft] <Int32>] [[-OffsetTop] <Int32>] [[-Flow] <String>] [[-DebugLevel] <Int32>] [<CommonParameters>]
 
 PARAMETERS
@@ -95,13 +95,13 @@ PARAMETERS
 
 ### Capturing output
 Because of the pipelining nature of `Powershell`, the `stdout` is used for returning objects.
-To capture streams that output the script's progress, use `*>&1` operator when calling `Position-Explorer-Window` as a *module*, or `>` when calling `Position-Explorer-Window` as a *script*.
+To capture streams that output the script's progress, use `*>&1` operator when calling `Position-ExplorerWindow` as a *module*, or `>` when calling `Position-ExplorerWindow` as a *script*.
 ```powershell
 # If using as a module
-Position-Explorer-Window -ConfigAsString $myConfig -Verbose *>&1 | Out-File -FilePath ./output.log
+Position-ExplorerWindow -ConfigAsString $myConfig -Verbose *>&1 | Out-File -FilePath ./output.log
 
 # If using as a script
-Powershell .\Position-Explorer-Window.ps1 > output.log
+Powershell .\Position-ExplorerWindow.ps1 > output.log
 ```
 
 ## FAQ
@@ -113,7 +113,7 @@ Q: Help! When I right-click the script and click *'Run with Powershell'*, it ope
 Q: I want to open multiple sets of windows quickly. How do I do that?
 - Simply make a copy of this script for each set of *Explorer* windows you want to open. Configure each script with a set of `$Paths`. Keep the scripts on your Desktop. You can now easily run those scripts, by right-clicking and selecting *'Run with Powershell'*.
 Alternatively, as seen in this demo, you can *pin Powershell onto your Taskbar*, then *pin those scripts* by dragging and dropping over the Powershell on the Taskbar. Now you can easily run them by right-clicking on Powershell, and clicking the script.
-![Pin Demo](https://github.com/leojonathanoh/Position-Explorer-Window/raw/master/images/pin-demo.gif "Demo of Position-Explorer-Window")
+![Pin Demo](https://github.com/leojonathanoh/Position-ExplorerWindow/raw/master/images/pin-demo.gif "Demo of Position-ExplorerWindow")
 
 Q: Help! the Taskbar is overlapping some of my Explorer windows!
 - You are probably an advanced user, using `$ModeEasy = 0`. A Taskbar with a single row of icons is often 40 pixels high (if at top or bottom) or 62 pixels wide (if at left or right). So:
@@ -124,10 +124,10 @@ Q: Help! the Taskbar is overlapping some of my Explorer windows!
     >
     p.s. If your Taskbar is has *two or more rows* of icons, then change the above by multiples of 40 or 62.
 
-Q: Help! Upon running the script I am getting an error <code>'File C:\...Position-Explorer-Window.ps1 cannot be loaded because the execution of scripts is disabled on this system. Please see "get-help about_signing" for more details.'</code>
+Q: Help! Upon running the script I am getting an error <code>'File C:\...Position-ExplorerWindow.ps1 cannot be loaded because the execution of scripts is disabled on this system. Please see "get-help about_signing" for more details.'</code>
 - You need to allow the execution of unverified scripts. Open Powershell as administrator, type <code>Set-ExecutionPolicy Unrestricted -Force</code> and press ENTER. Try running the script again. You can easily restore the security setting back by using <code>Set-ExecutionPolicy Undefined -Force</code>.
 
-Q: Help! Upon running the script I am getting an error <code>File C:\...Position-Explorer-Windows.ps1 cannot be loaded. The file C:\...\Position-Explorer-Windows.ps1 is not digitally signed. You cannot run this script on the current system. For more information about running scripts and setting execution policy, see about_Execution_Policies at http://go.microsoft.com/fwlink/?LinkID=135170.</code>
+Q: Help! Upon running the script I am getting an error <code>File C:\...Position-ExplorerWindows.ps1 cannot be loaded. The file C:\...\Position-ExplorerWindows.ps1 is not digitally signed. You cannot run this script on the current system. For more information about running scripts and setting execution policy, see about_Execution_Policies at http://go.microsoft.com/fwlink/?LinkID=135170.</code>
 - You need to allow the execution of unverified scripts. Open Powershell as administrator, type <code>Set-ExecutionPolicy Unrestricted -Force</code> and press ENTER. Try running the script again. You can easily restore the security setting back by using <code>Set-ExecutionPolicy Undefined -Force</code>.
 
 

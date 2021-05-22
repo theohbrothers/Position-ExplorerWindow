@@ -1,4 +1,4 @@
-function Position-Resize-Window {
+function Position-ResizeWindow {
     Param(
         [Parameter(Mandatory=$True,Position=0)]
 		#[ValidateRange(0, [int]::MaxValue)]

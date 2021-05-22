@@ -1,4 +1,4 @@
-function Position-Explorer-Window {
+function Position-ExplorerWindow {
     <#
     .SYNOPSIS
     Opens, resizes, and arranges multiple Explorer Windows at specified paths in a grid fashion to fit a screen, or multiple screens.
@@ -106,29 +106,29 @@ function Position-Explorer-Window {
 
     .EXAMPLE
     Example 1a: This opens 4 windows: all 4 windows stacked vertically, occupying a total of half your Main full-HD Screen.
-    Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'M' -Rows 4 -Cols 2 -Flow 'Y'
+    Position-ExplorerWindow -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'M' -Rows 4 -Cols 2 -Flow 'Y'
 
     Example 1b: This is the same as Example 1, except instead of stacking vertically, windows flow in a zig-zag fashion: the first 2 windows are stacked horizontally in one row, then the next 2 are stacked horintally on the next row below. Each window's width is 1/2 the screen's width, and height 1/4 the screen's height.
-    Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'M' -Rows 4 -Cols 2 -Flow 'X'
+    Position-ExplorerWindow -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'M' -Rows 4 -Cols 2 -Flow 'X'
 
     Example 2: This opens 4 windows: 3 windows stacked vertically on the left half of your Main full-HD Screen, and 1 window on the top occupying 1/3 of the right half of your Main full-HD Screen.
-    Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'M' -Rows 3 -Cols 2 -OffsetLeft 0 -OffsetTop 0 -Flow 'X'
+    Position-ExplorerWindow -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'M' -Rows 3 -Cols 2 -OffsetLeft 0 -OffsetTop 0 -Flow 'X'
 
     Example 3: This is the same as Example 1a, except the windows are on your Left Monitor.
-    Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'L' -Rows 4 -Cols 2 -Flow 'Y'
+    Position-ExplorerWindow -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'L' -Rows 4 -Cols 2 -Flow 'Y'
 
     Example 4: This is the same as Example 2, except the windows are on your Right Monitor.
-    Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'R' -Rows 3 -Cols 2 -OffsetLeft 0 -OffsetTop 0 -Flow 'X'
+    Position-ExplorerWindow -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'R' -Rows 3 -Cols 2 -OffsetLeft 0 -OffsetTop 0 -Flow 'X'
 
     Example 5: This is a nice hack if you have 2 screens. You want the windows to span two screens, rather than being confined to a single screen.
                 Assumes your second screen is to the left of your Main Monitor.
                 This will open 4 windows: 2 your Left Monitor, 2 on your Main monitor,  arranged horizontally, each taking up 1/2 the width and 1/2 the height of each screen
-    Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 3840 -DestinationScreenHeight 1080 -DestinationMonitor 'L' -Rows 2 -Cols 4 -OffsetLeft 1920 -OffsetTop 0 -Flow 'X'
+    Position-ExplorerWindow -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 3840 -DestinationScreenHeight 1080 -DestinationMonitor 'L' -Rows 2 -Cols 4 -OffsetLeft 1920 -OffsetTop 0 -Flow 'X'
 
     Example 6: This is a nice hack if you have 3 screens. You want the windows to span three screens, rather than being confined to a single screen.
                 Assumes your second screen is to the left of your Main Monitor, and the third is to the right of your Main Monitor.
                 This will open 6 windows: There will be on the first row, 2 windows your Left Monitor, 2 on your Main monitor, 2 on your Right Monitor, arranged horizontally, each taking up 1/3 the width and 1/3 the height of each screen
-    Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', 'D:\My Data Folder\Data3', 'D:\My Data Folder\Data\', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 5760 -DestinationScreenHeight 1080 -DestinationMonitor 'L' -Rows 3 -Cols 3 -OffsetLeft 3840 -OffsetTop 0 -Flow 'X'
+    Position-ExplorerWindow -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', 'D:\My Data Folder\Data3', 'D:\My Data Folder\Data\', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 5760 -DestinationScreenHeight 1080 -DestinationMonitor 'L' -Rows 3 -Cols 3 -OffsetLeft 3840 -OffsetTop 0 -Flow 'X'
 
 
     .NOTES
@@ -238,7 +238,7 @@ function Position-Explorer-Window {
     }
     process {
         try {
-            Write-Host "[Position-Explorer-Window options]" -ForegroundColor Cyan
+            Write-Host "[Position-ExplorerWindow options]" -ForegroundColor Cyan
             Write-Host "Paths: " -ForegroundColor Green
             $Paths | ForEach-Object { Write-Host " $($_.Trim())" -ForegroundColor Green }
             Write-Host "DestinationScreenWidth: $DestinationScreenWidth" -ForegroundColor Green
@@ -447,7 +447,7 @@ function Position-Explorer-Window {
                     # Try and reposition and resize Window
                     Write-Host "`tRepositioning and Resizing window..." -ForegroundColor Green
 
-                    $success = Position-Resize-Window -ProcessId $child_pid -Left $my_left -Top $my_top -Width $my_width -Height $my_height
+                    $success = Position-ResizeWindow -ProcessId $child_pid -Left $my_left -Top $my_top -Width $my_width -Height $my_height
                     if ($success) {
                         Write-Host "`tSuccessfully repositioned and resized window." -ForegroundColor Green
 
