@@ -1,13 +1,13 @@
-﻿function Position-Explorer-Window {
+function Position-Explorer-Window {
     <#
     .SYNOPSIS
     Opens, resizes, and arranges multiple Explorer Windows at specified paths in a grid fashion to fit a screen, or multiple screens.
-    
+
     .DESCRIPTION
-    This script / module has the ability to quickly open multiple Explorer Windows at specified paths in an grid, arranging them to fit a screen, or multiple screens (no limit, really), in a predictable and orderly fashion. 
+    This script / module has the ability to quickly open multiple Explorer Windows at specified paths in an grid, arranging them to fit a screen, or multiple screens (no limit, really), in a predictable and orderly fashion.
     All you have to do is to add the folders into the script config, and run the script, and you get a grid of Explorer windows.
     This is most useful when working with half a dozen or more folders simultaneously, because it saves time and effort rearranging and fitting Explorer Windows into a nice and orderly fashion, so that they can be easily accessed.
-    
+
     Background: An Explorer window cannot be opened at a specified coordinate on the screen through its command line. Because the author could not find any working solution that could conveniently open multiple Explorer windows in specified folders arranged in a predictable and orderly fashion on the screen, there had to be a tool that could do this.
 
     .PARAMETER Paths
@@ -21,25 +21,25 @@
     #           \\MYSERVER\public
     #           \\192.168.0.1\\share
     #       '
-    
+
     .PARAMETER ModeEasy
     # Simple Mode. In this mode, most defaults are used.
     # If you hate configurations, simply set this to 1 and you're done.
     # Default: 0
 
     .PARAMETER DestinationScreenWidth
-    # Resolution of the Destination Screen (think of this as block of pixels, and not necesarily a Monitor's resolution) where the Explorer windows will reside. 
+    # Resolution of the Destination Screen (think of this as block of pixels, and not necesarily a Monitor's resolution) where the Explorer windows will reside.
     # For Single-Monitor setups, in most cases should match your Monitor's resolution.
     # For Multi-Monitor setups, you may also think of this a pooling of a block of pixels spanning your screen(s). You may use 3840 x 1080 to pool multiple monitor pixels together, or use 640 x 480 to select a smaller pool
 
     .PARAMETER DestinationScreenHeight
-    # Resolution of the Destination Screen (think of this as block of pixels, and not necesarily a Monitor's resolution) where the Explorer windows will reside. 
+    # Resolution of the Destination Screen (think of this as block of pixels, and not necesarily a Monitor's resolution) where the Explorer windows will reside.
     # For Single-Monitor setups, in most cases should match your Monitor's resolution.
     # For Multi-Monitor setups, you may also think of this a pooling of a block of pixels spanning your screen(s). You may use 3840 x 1080 to pool multiple monitor pixels together, or use 640 x 480 to select a smaller pool
-    
+
     .PARAMETER DestinationMonitor
     # Physical position of the Destination Monitor where the Explorer windows will open
-    # NOTE: 
+    # NOTE:
     #  This is ignored if you have only 1 monitor.
     # Possible values: 'M', L', 'R', 'T', 'B'
     # E.g. 'M' - Destination Monitor is the Main Monitor
@@ -48,18 +48,18 @@
     # E.g. 'T' - Destination Monitor is to the top of the Main Monitor
     # E.g. 'B' - Destination Monitor is to the bottom of the Main Monitor
     # Default: 'M'
-    
+
     .PARAMETER Rows
-    # Define the number of rows of Explorer instances 
+    # Define the number of rows of Explorer instances
     # E.g. 4 - a maximum of four explorer instances will be stacked vertically in a column. The 5th-8th windows will be stacked on the next column to the right of the previous column. And so on.
     # Default: 4
-    
+
     .PARAMETER Cols
     # Define the number of columns of Explorer instances
     # If a value greater than 1 is specified, columns of x windows will stack horizontally (where x is a defined in $Rows)
     # E.g. A value of 2 means that 2 columns of x explorer instances will be stacked horizontally
     # Default: 2
-    
+
     .PARAMETER OffsetLeft
     # How many pixels left/right the Explorer instances should be shifted from the Top-Left Corner(0,0) of the Destination Monitor. Useful in the case of multiple-monitor setups.
     # Best to be left as default (left-most of Destination screen)
@@ -70,7 +70,7 @@
     #         x the windows the windows on the Destination Monitor, x pixels right of its leftmost edge.
     #         -x positions the windows on the Destination Monitor, x pixels left of its leftmost edge.
     # Default: 0
-    
+
     .PARAMETER OffsetTop
     # How many pixels up/down the Explorer instances should be shifted from the Top-Left Corner(0,0) of the Destination Monitor. Useful in the case of multiple-monitor setups.
     # Best to be left as default (The very top of destination screen)
@@ -81,7 +81,7 @@
     #         y the windows the windows on the Destination Monitor, x pixels down of its topmost edge.
     #         -y positions the windows on the Destination Monitor, x pixels up of its topmost edge.
     # Default: 0
-    
+
     .PARAMETER Flow
     # Arrangement of Explorer Windows
     # Whether windows should flow left-to-right, or top-down fashion
@@ -98,7 +98,7 @@
     #       | 2 | 4 |
     #       ---------
     # Default: 'Y'
-    
+
     .PARAMETER DebugLevel
     # Debug level
     # 0 - Off
@@ -107,30 +107,30 @@
     .EXAMPLE
     Example 1a: This opens 4 windows: all 4 windows stacked vertically, occupying a total of half your Main full-HD Screen.
     Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'M' -Rows 4 -Cols 2 -Flow 'Y'
-    
+
     Example 1b: This is the same as Example 1, except instead of stacking vertically, windows flow in a zig-zag fashion: the first 2 windows are stacked horizontally in one row, then the next 2 are stacked horintally on the next row below. Each window's width is 1/2 the screen's width, and height 1/4 the screen's height.
     Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'M' -Rows 4 -Cols 2 -Flow 'X'
 
     Example 2: This opens 4 windows: 3 windows stacked vertically on the left half of your Main full-HD Screen, and 1 window on the top occupying 1/3 of the right half of your Main full-HD Screen.
     Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'M' -Rows 3 -Cols 2 -OffsetLeft 0 -OffsetTop 0 -Flow 'X'
-   
+
     Example 3: This is the same as Example 1a, except the windows are on your Left Monitor.
     Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'L' -Rows 4 -Cols 2 -Flow 'Y'
 
     Example 4: This is the same as Example 2, except the windows are on your Right Monitor.
     Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 1920 -DestinationScreenHeight 1080 -DestinationMonitor 'R' -Rows 3 -Cols 2 -OffsetLeft 0 -OffsetTop 0 -Flow 'X'
 
-    Example 5: This is a nice hack if you have 2 screens. You want the windows to span two screens, rather than being confined to a single screen. 
-                Assumes your second screen is to the left of your Main Monitor. 
+    Example 5: This is a nice hack if you have 2 screens. You want the windows to span two screens, rather than being confined to a single screen.
+                Assumes your second screen is to the left of your Main Monitor.
                 This will open 4 windows: 2 your Left Monitor, 2 on your Main monitor,  arranged horizontally, each taking up 1/2 the width and 1/2 the height of each screen
     Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 3840 -DestinationScreenHeight 1080 -DestinationMonitor 'L' -Rows 2 -Cols 4 -OffsetLeft 1920 -OffsetTop 0 -Flow 'X'
 
-    Example 6: This is a nice hack if you have 3 screens. You want the windows to span three screens, rather than being confined to a single screen. 
-                Assumes your second screen is to the left of your Main Monitor, and the third is to the right of your Main Monitor. 
+    Example 6: This is a nice hack if you have 3 screens. You want the windows to span three screens, rather than being confined to a single screen.
+                Assumes your second screen is to the left of your Main Monitor, and the third is to the right of your Main Monitor.
                 This will open 6 windows: There will be on the first row, 2 windows your Left Monitor, 2 on your Main monitor, 2 on your Right Monitor, arranged horizontally, each taking up 1/3 the width and 1/3 the height of each screen
     Position-Explorer-Window -paths @('D:\My Data Folder\Data1', 'D:\My Data Folder\Data2', 'D:\My Data Folder\Data3', 'D:\My Data Folder\Data\', '\\MYSERVER\public', '\\192.168.0.1\share') -DestinationScreenWidth 5760 -DestinationScreenHeight 1080 -DestinationMonitor 'L' -Rows 3 -Cols 3 -OffsetLeft 3840 -OffsetTop 0 -Flow 'X'
 
-    
+
     .NOTES
     ################################################################################################################################
     # Dependencies:                                                                                                                #
@@ -154,7 +154,7 @@
 		[Int]$DestinationScreenHeight
 	,
         [Parameter(Mandatory=$False,Position=4)]
-        [ValidateSet('M', 'L', 'R', 'T', 'B')] 
+        [ValidateSet('M', 'L', 'R', 'T', 'B')]
 		[String]$DestinationMonitor = 'M'
 	,
         [Parameter(Mandatory=$False,Position=5)]
@@ -174,17 +174,17 @@
 		[Int]$OffsetTop = 0
 	,
         [Parameter(Mandatory=$False,Position=9)]
-		[ValidateSet('X', 'Y')] 
+		[ValidateSet('X', 'Y')]
 		[String]$Flow = 'Y'
 	,
         [Parameter(Mandatory=$False,Position=10)]
 		#[ValidateRange(0, 1)]
         [Int]$DebugLevel = 0
     )
-    
+
     begin {
         # NOTE: No longer using UIAutomation Module.
-        # Import Dependency - UIAutomation Module 
+        # Import Dependency - UIAutomation Module
         #try {
         #    Import-Module UIAutomation -ErrorAction Stop
         #    [UIAutomation.Preferences]::HighlightParent = $False
@@ -205,7 +205,7 @@
 
         # Get all main monitors resolution
         # From: https://stackoverflow.com/questions/7967699/get-screen-resolution-using-wmi-powershell-in-windows-7/7968063#7968063
-        # The returned screen objects appears to be in order of the physical position of the monitors, from left to right, 
+        # The returned screen objects appears to be in order of the physical position of the monitors, from left to right,
         #  regardless of what the monitor's ID in Control Panel's / Settings 'Identify' feature shows.
         Add-Type -AssemblyName System.Windows.Forms
         $screens = [System.Windows.Forms.Screen]::AllScreens
@@ -229,7 +229,7 @@
             $DestinationScreenWidth = $mainMonitorWidth
             $DestinationScreenHeight = $mainMonitorHeight
         }
-        
+
         # Determine number of monitors
         $numMonitors = $screens.Count
         # Doesn't work on Windows 7 PSv2
@@ -271,7 +271,7 @@
 
                         # Calculate top
                         $top = 0 + $OffsetTop
-                    } 
+                    }
                     'L' {
                         # Calculate left
                         $startingPoint = 0 - $DestinationScreenWidth
@@ -296,7 +296,7 @@
 
                         # Calculate top
                         $startingPoint = 0 - $DestinationScreenHeight
-                        $top = $startingPoint + $OffsetTop 
+                        $top = $startingPoint + $OffsetTop
                     }
                     'B' {
                         # Calculate left
@@ -304,7 +304,7 @@
 
                         # Calculate top
                         $startingPoint = 0 + $DestinationScreenHeight
-                        $top = $startingPoint + $OffsetTop 
+                        $top = $startingPoint + $OffsetTop
                     }
                 }
             }
@@ -384,19 +384,19 @@
                 #################
                 # Start-Process: https://ss64.com/ps/start-process.html
                 # explorer.exe: https://ss64.com/nt/explorer.html
-                # Note: A newly started explorer.exe subsequently spawns a child explorer.exe before killing itself. 
+                # Note: A newly started explorer.exe subsequently spawns a child explorer.exe before killing itself.
                 # Start a new explorer.exe process and get its pid
                 Write-Host "`tStarting Explorer process..." -ForegroundColor Yellow
                 $parent = Start-Process -FilePath explorer -ArgumentList "/separate,`"$Path`"" -PassThru
                 $parent_pid = $parent.Id
-            
+
                 # Skip over this path if we didn't get a newly started explorer.exe
                 if (!$parent_pid) { Write-Warning "Could not find parent explorer.exe. Skipping."; Continue }
 
                 # Get the explorer processes before launching
                 Write-Host "`tGetting Explorer processes..." -ForegroundColor Yellow
                 $processes_prev = Get-Process explorer
-                
+
                 # Skip over this path if we didn't get any explorer instances.
                 if (!$processes_prev) { Write-Warning "No explorer.exe instances found. Quitting."; Exit }
                 if ($DebugLevel -band 1) { $processes_prev | Format-Table | Out-String | % { Write-Host $_.Trim() } }
@@ -404,7 +404,7 @@
 
                 # Get the pid of the spawned child explorer.exe. This is achieved by getting a diff-object of explorer.exe processes until we find the spawned child's pid
                 Write-Host "`tGetting spawned child process..." -ForegroundColor Yellow
-                
+
                 # Loop count
                 $x = 0
                 $child_pid = $NULL
@@ -417,7 +417,7 @@
                     $processes_after = Get-Process explorer
                     if ($DebugLevel -band 1) { $processes_after | Format-Table | Out-String | Write-Host }
 
-                    # Get the child process id from the difference object between two collections of explorer.exe 
+                    # Get the child process id from the difference object between two collections of explorer.exe
                     # E.g.
                     #  Loop 0: $NULL
                     #  Loop 1: 7972
@@ -425,17 +425,17 @@
                     if ($DebugLevel -band 1) { Write-Host "`t`t >Diff: $child_pid" }
 
                     # Successfully found a child process id. Print a message
-                    if ($child_pid) { 
+                    if ($child_pid) {
                         if ($DebugLevel -band 1) { Write-Host "`tWe took $x loops to get the child process id: $child_pid" -ForegroundColor Green }
-                        Write-Host "`tWe found the child process" -ForegroundColor Green 
+                        Write-Host "`tWe found the child process" -ForegroundColor Green
                     }
 
                     # Stop looping if we can't find it
-                    if ($x -gt 100) { 
-                        if ($DebugLevel -band 1) { 
+                    if ($x -gt 100) {
+                        if ($DebugLevel -band 1) {
                             Write-Host "We took too many loops($x) and $( $x * $SleepMilliseconds )ms and to find the child explorer process." -ForegroundColor Yellow
                         }
-                        break 
+                        break
                     }
                     Start-Sleep -Milliseconds $SleepMilliseconds
                 }
@@ -446,7 +446,7 @@
 
                     # Try and reposition and resize Window
                     Write-Host "`tRepositioning and Resizing window..." -ForegroundColor Green
-                        
+
                     $success = Position-Resize-Window -ProcessId $child_pid -Left $my_left -Top $my_top -Width $my_width -Height $my_height
                     if ($success) {
                         Write-Host "`tSuccessfully repositioned and resized window." -ForegroundColor Green
@@ -466,117 +466,3 @@
     }
     # End process #
 }
-
-function Position-Resize-Window {
-    Param(
-        [Parameter(Mandatory=$True,Position=0)]
-		#[ValidateRange(0, [int]::MaxValue)]
-        [int]$ProcessId
-    ,
-        [Parameter(Mandatory=$True,Position=1)]
-		#[ValidateRange([int]::MinValue, [int]::MaxValue)]
-        [int]$Left
-    ,
-        [Parameter(Mandatory=$True,Position=2)]
-		#[ValidateRange([int]::MinValue, [int]::MaxValue)]
-        [int]$Top
-    ,
-        [Parameter(Mandatory=$True,Position=3)]
-		#[ValidateRange([int]::MinValue, [int]::MaxValue)]
-        [int]$Width
-    ,
-        [Parameter(Mandatory=$True,Position=4)]
-		#[ValidateRange([int]::MinValue, [int]::MaxValue)]
-        [int]$Height
-    )
-
-    # NOTE: No longer using UIAutomation Module.
-    # Get UIA object from process id, and manipulate its position and size
-    #$w = Get-UiaWindow -ProcessId $processId
-    #if ($w.CanMove -and $w.CanResize) {
-    #    $w.move($left, $top) | Out-Null
-    #    $w.Resize($width, $height) | Out-Null  
-    #    $True
-    #}
-
-    # Using PInvoke:
-    # http://www.pinvoke.net/default.aspx/user32.getwindowrect
-    # http://www.pinvoke.net/default.aspx/user32.getclientrect
-    # http://www.pinvoke.net/default.aspx/user32.movewindow
-    # https://gist.github.com/coldnebo/1148334
-    Add-Type '
-        using System;
-        using System.Runtime.InteropServices;
-        
-        public class Win32 {
-            [DllImport("user32.dll")]
-            [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-        
-            [DllImport("user32.dll")]
-            [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
-        
-            [DllImport("user32.dll")]
-            [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
-        }
-        
-        public struct RECT
-        {
-            public int Left;        // x position of upper-left corner
-            public int Top;         // y position of upper-left corner
-            public int Right;       // x position of lower-right corner
-            public int Bottom;      // y position of lower-right corner
-        }
-    '
-
-    # Keep trying to move the window until we are successful.
-    if ($DebugLevel -band 1) { Write-Host "`t`tAttempting to move window......" -ForegroundColor Yellow }
-    $x = 0
-    while (!$result) {
-        $SleepMilliseconds = 10
-        $x++
-
-        # Get et the process handle
-        $handle = (Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Id -eq $ProcessId } | Select-Object -First 1).MainWindowHandle
-        if ($handle) {
-            # Debug
-            if ($DebugLevel -band 1) {
-                Write-Host "`t`Getting window handle......" -ForegroundColor Yellow
-                Write-Host "`t`tProcessId: $ProcessId handle: $handle"
-                $window = New-Object RECT
-                $client = New-Object RECT
-                [Win32]::GetWindowRect($handle, [ref]$window) | Out-Null
-                [Win32]::GetClientRect($handle, [ref]$client) | Out-Null
-                Write-Host "`t`twindow Left: $($window.Left), Top: $($window.Top), Right: $($window.Right), Bottom: $($window.Bottom)"
-                Write-Host "`t`tclient Left: $($client.Left), Top: $($client.Top), Right: $($client.Right), Bottom: $($client.Bottom)"
-            }
-
-            # Draw it once far away, then draw it on its location. This makes the flicker less apparent
-            $result = [Win32]::MoveWindow($handle, $Left, ($Top - 10000), $Width, $Height, $true) -and [Win32]::MoveWindow($handle, $Left, $Top, $Width, $Height, $true)
-            if ($result) {
-                # Successfully moved and sized window
-                return $true
-            }
-
-            # Stop looping if we failed too many times
-            if ($x -gt 100) { 
-                if ($DebugLevel -band 1) { 
-                    Write-Host "We took too many loops($x) and $( $x * $SleepMilliseconds )ms to position and resize a window." -ForegroundColor Yellow
-                }
-                break 
-            }
-        }
-        Start-Sleep -Milliseconds $SleepMilliseconds
-    }
-    if (!$result) {
-        Write-Host "Failed to get window handle! Loop count: $x"
-    }
-
-    $false
-
-}
-
-
-Export-ModuleMember -Function Position-Explorer-Window
