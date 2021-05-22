@@ -7,7 +7,7 @@ Opens, resizes, and arranges multiple `Explorer` windows at specified paths in a
 - Powershell v2
 
 ## Demo
-![Demo](https://github.com/leojonathanoh/Position-ExplorerWindow/raw/master/images/preview-demo.gif "Demo of Position-ExplorerWindow")
+![Demo](https://github.com/theohbrothers/Position-ExplorerWindow/raw/master/images/preview-demo.gif "Demo of Position-ExplorerWindow")
 
 ## Usage
 
@@ -113,7 +113,7 @@ Q: Help! When I right-click the script and click *'Run with Powershell'*, it ope
 Q: I want to open multiple sets of windows quickly. How do I do that?
 - Simply make a copy of this script for each set of *Explorer* windows you want to open. Configure each script with a set of `$Paths`. Keep the scripts on your Desktop. You can now easily run those scripts, by right-clicking and selecting *'Run with Powershell'*.
 Alternatively, as seen in this demo, you can *pin Powershell onto your Taskbar*, then *pin those scripts* by dragging and dropping over the Powershell on the Taskbar. Now you can easily run them by right-clicking on Powershell, and clicking the script.
-![Pin Demo](https://github.com/leojonathanoh/Position-ExplorerWindow/raw/master/images/pin-demo.gif "Demo of Position-ExplorerWindow")
+![Pin Demo](https://github.com/theohbrothers/Position-ExplorerWindow/raw/master/images/pin-demo.gif "Demo of Position-ExplorerWindow")
 
 Q: Help! the Taskbar is overlapping some of my Explorer windows!
 - You are probably an advanced user, using `$ModeEasy = 0`. A Taskbar with a single row of icons is often 40 pixels high (if at top or bottom) or 62 pixels wide (if at left or right). So:
