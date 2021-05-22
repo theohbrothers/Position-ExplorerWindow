@@ -1,5 +1,10 @@
 # Position-ExplorerWindow
 
+[![github-actions](https://github.com/theohbrothers/Position-ExplorerWindow/workflows/ci-master-pr/badge.svg)](https://github.com/theohbrothers/Position-ExplorerWindow/actions)
+[![github-release](https://img.shields.io/github/v/release/theohbrothers/Position-ExplorerWindow?style=flat-square)](https://github.com/theohbrothers/Position-ExplorerWindow/releases/)
+[![powershell-gallery-release](https://img.shields.io/powershellgallery/v/Position-ExplorerWindow?logo=powershell&logoColor=white&label=PSGallery&labelColor=&style=flat-square)](https://www.powershellgallery.com/packages/Position-ExplorerWindow/)
+
+
 Opens, resizes, and arranges multiple `Explorer` windows at specified paths in a *grid* fashion to fit a screen, or multiple screens.
 
 ## Requirements:
