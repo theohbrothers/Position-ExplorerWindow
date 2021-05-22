@@ -9,40 +9,10 @@ Opens, resizes, and arranges multiple `Explorer` windows at specified paths in a
 ## Demo
 ![Demo](https://github.com/leojonathanoh/Position-Explorer-Window/raw/master/images/preview-demo.gif "Demo of Position-Explorer-Window")
 
-## How to use
-`Position-Explorer-Window` can be used as a *script*, or a *module*.
-### As a Script
-This is the simplest method.
-1. Open `Position-Explorer-Window.ps1` in your favourite text editor and edit the script settings at the very top. If you hate configuration, be sure to add the paths, and then to set `$ModeEasy` to `1`:
-
-    ```powershell
-    # Enter one path per line. Edit between the @' and '@
-    $Paths = @'
-    D:\My Data Folder\Data1
-    D:\My Data Folder\Data2
-    D:\My Data Folder\Data3
-    D:\My Data Folder\Data4
-    \\MYSERVER\public
-    \\192.168.0.1\\share
-    ....
-    ....
-    '@
-
-    # Easy Mode
-    # If you hate configurations, simply set this to 1, and forget about everything below
-    # 0 - Easy mode OFF
-    # 1 - Easy mode ON
-    # Default: 1
-    $ModeEasy = 1
-    ```
-
-
-2. Run the script: Right click on the script in `Explorer` and select <code>Run with Powershell</code>. (should be present on Windows 7 and up). Alternatively, open `Command Prompt` in the script directory, and run <code>Powershell .\Position-Explorer-Window.ps1</code>
-
-3. You can now make copies of the script, each with its own *set* of `Explorer` windows you want to open.
+## Usage
 
 ### As a Module
-This method is only for advanced users.
+
 1. [Install](https://msdn.microsoft.com/en-us/library/dd878350(v=vs.85).aspx) the `Position-Explorer-Window.psm1` module into **any** of the following directories:
     ```powershell
     %Windir%\System32\WindowsPowerShell\v1.0\Modules
