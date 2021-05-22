@@ -1,3 +1,4 @@
-tests
-Create-Module.ps1
-images/original
+/.*
+!/.github
+!/.gitignore
+!/.vscode
