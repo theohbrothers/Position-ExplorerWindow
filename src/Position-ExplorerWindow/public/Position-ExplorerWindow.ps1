@@ -197,6 +197,11 @@ function Position-ExplorerWindow {
         $callerEA = $ErrorActionPreference
         $ErrorActionPreference = 'Stop'
 
+        if ($PSVersionTable.PSVersion.Major -gt 5) {
+            Write-Host "Module is only supported on Powershell v5 or lower."
+            return
+        }
+
         # Get all main monitors resolution
         # Doesn't work for Windows 7 PSv2
         #$mainMonitor = Get-Wmiobject Win32_Videocontroller
@@ -208,7 +213,12 @@ function Position-ExplorerWindow {
         # The returned screen objects appears to be in order of the physical position of the monitors, from left to right,
         #  regardless of what the monitor's ID in Control Panel's / Settings 'Identify' feature shows.
         Add-Type -AssemblyName System.Windows.Forms
-        $screens = [System.Windows.Forms.Screen]::AllScreens
+        if ([System.AppDomain]::CurrentDomain.GetAssemblies() | ? { $_.FullName -match 'System.Windows.Forms' }) {
+            $screens = [System.Windows.Forms.Screen]::AllScreens
+        }else {
+            throw "Failed to load assembly: System.Windows.Forms"
+        }
+
         # Lets get the Main Monitor's resolution
         Write-Host "`n[Detecting Main Monitor Resolution]" -ForegroundColor Cyan
         $mainMonitor = $screens | Where-Object { $_.Primary } | Select-Object -First 1
@@ -461,7 +471,7 @@ function Position-ExplorerWindow {
                 }
             } # End paths loop
         }catch {
-            Write-Error "Error occured running script: $($_.Exception.Message)" -ErrorAction $CallerEA
+            Write-Error -ErrorRecord $_ -ErrorAction $CallerEA
         }
     }
     # End process #
