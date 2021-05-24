@@ -23,19 +23,27 @@ If prompted to trust the repository, hit `Y` and `enter`.
 ```powershell
 Import-Module Position-ExplorerWindow
 
-# Build the params
+# Simply use -ModeEasy with a list of -Paths
+Position-ExplorerWindow -ModeEasy -Paths 'C:/path/to/folder1', 'C:/path/to/folder2', 'C:/path/to/folder3', 'C:/path/to/folder4'
+```
+
+## Usage (advanced)
+
+```powershell
+Import-Module Position-ExplorerWindow
+
+# Configure to your liking
 $params = @{
-    'ModeEasy' = $ModeEasy
-    'Paths' = $Paths
-    'DestinationScreenWidth' = $DestinationScreenWidth
-    'DestinationScreenHeight' = $DestinationScreenHeight
-    'DestinationMonitor' = $DestinationMonitor
-    'Rows' = $Rows
-    'Cols' = $Cols
-    'OffsetLeft' = $OffsetLeft
-    'OffsetTop' = $OffsetTop
-    'Flow' = $Flow
-    'DebugLevel' = $DebugLevel
+    'Paths' = 'C:/path/to/folder1', 'C:/path/to/folder2', 'C:/path/to/folder3', 'C:/path/to/folder4', 'D:/path/to/folder1', 'D:/path/to/folder2', 'D:/path/to/folder3', 'D:/path/to/folder4'
+    'DestinationScreenWidth' = 1920
+    'DestinationScreenHeight' = 1080
+    'DestinationMonitor' = 'M'
+    'Rows' = 4
+    'Cols' = 2
+    'OffsetLeft' = 0
+    'OffsetTop' = 0
+    'Flow' = 'Y'
+    'DebugLevel' = 0
 }
 # Call with params splatting
 Position-ExplorerWindow @params
@@ -54,7 +62,7 @@ Q: Help! When I right-click the script and click *'Run with Powershell'*, it ope
 - You probably are seeing a *red colored error message* in the window just before it disappears. You need to allow the execution of unverified scripts. Open Powershell as administrator, type `Set-ExecutionPolicy Unrestricted -Force` and press ENTER. Try running the script again. You can easily restore the security setting back by using `Set-ExecutionPolicy Undefined -Force`.
 
 Q: I want to open multiple sets of windows quickly. How do I do that?
-- Simply make a copy of this script for each set of *Explorer* windows you want to open. Configure each script with a set of `$Paths`. Keep the scripts on your Desktop. You can now easily run those scripts, by right-clicking and selecting *'Run with Powershell'*.
+- Simply make a copy of the usage script above for each set of *Explorer* windows you want to open. Configure each script with a set of `$Paths`. Keep the scripts on your Desktop. You can now easily run those scripts, by right-clicking and selecting *'Run with Powershell'*.
 Alternatively, as seen in this demo, you can *pin Powershell onto your Taskbar*, then *pin those scripts* by dragging and dropping over the Powershell on the Taskbar. Now you can easily run them by right-clicking on Powershell, and clicking the script.
 ![Pin Demo](https://github.com/theohbrothers/Position-ExplorerWindow/raw/master/images/pin-demo.gif "Demo of Position-ExplorerWindow")
 

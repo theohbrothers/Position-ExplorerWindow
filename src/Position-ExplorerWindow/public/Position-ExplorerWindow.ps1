@@ -24,8 +24,7 @@ function Position-ExplorerWindow {
 
     .PARAMETER ModeEasy
     # Simple Mode. In this mode, most defaults are used.
-    # If you hate configurations, simply set this to 1 and you're done.
-    # Default: 0
+    # If you hate configurations, simply use this with -Paths
 
     .PARAMETER DestinationScreenWidth
     # Resolution of the Destination Screen (think of this as block of pixels, and not necesarily a Monitor's resolution) where the Explorer windows will reside.
@@ -140,7 +139,7 @@ function Position-ExplorerWindow {
     [CmdletBinding()]
 	Param(
         [Parameter(Mandatory=$False,Position=0)]
-        [int]$ModeEasy = 0
+        [switch]$ModeEasy
     ,
         [Parameter(Mandatory=$True,Position=1)]
         [String[]]$Paths
