@@ -6,7 +6,7 @@
     RootModule = 'Position-ExplorerWindow.psm1'
     # ModuleVersion = ''                            # Value will be set for each publication based on the tag ref. Defaults to '0.0.0' in development environments and regular CI builds
     GUID = 'c9a2d63b-d56c-4c11-83ad-60ad86eb7dbd'
-    Author = 'Position-ExplorerWindow'
+    Author = 'The Oh Brothers'
     CompanyName = 'The Oh Brothers'
     Copyright = '(c) 2017 The Oh Brothers'
     Description = 'Opens, resizes, and arranges multiple `Explorer` windows at specified paths in a grid fashion to fit a screen, or multiple screens.'
