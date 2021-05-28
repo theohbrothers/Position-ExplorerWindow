@@ -22,10 +22,10 @@
     # TypesToProcess = @()
     # FormatsToProcess = @()
     # NestedModules = @()
-    FunctionsToExport = @()
-    CmdletsToExport = @(
-        'Position-ExplorerWindow'
+    FunctionsToExport = @(
+        Get-ChildItem $PSScriptRoot/../../../src/Position-ExplorerWindow/public -Exclude *.Tests.ps1 | % { $_.BaseName }
     )
+    CmdletsToExport = @()
     VariablesToExport = @()
     AliasesToExport = @()
     # DscResourcesToExport = @()
