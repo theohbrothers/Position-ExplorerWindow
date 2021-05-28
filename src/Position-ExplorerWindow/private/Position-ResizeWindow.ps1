@@ -20,10 +20,6 @@ function Position-ResizeWindow {
         [Parameter(Mandatory=$True,Position=4)]
         #[ValidateRange([int]::MinValue, [int]::MaxValue)]
         [int]$Height
-    ,
-        [Parameter(Mandatory=$False,Position=10)]
-        #[ValidateRange(0, 1)]
-        [int]$DebugLevel = 0
     )
 
     # NOTE: No longer using UIAutomation Module.
@@ -72,7 +68,7 @@ function Position-ResizeWindow {
     }
 
     # Keep trying to move the window until we are successful.
-    if ($DebugLevel -band 1) { Write-Host "`t`tAttempting to move window......" -ForegroundColor Yellow }
+    "`t`tAttempting to move window......" | Write-Verbose
     $result = $null
     $loopCount = 0
     $SleepMilliseconds = 10
@@ -83,17 +79,16 @@ function Position-ResizeWindow {
         $process = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Id -eq $ProcessId } | Select-Object -First 1
         if ($process) {
             $handle = $process.MainWindowHandle
+
             # Debug
-            if ($DebugLevel -band 1) {
-                Write-Host "`t`Getting window handle......" -ForegroundColor Yellow
-                Write-Host "`t`tProcessId: $ProcessId handle: $handle"
-                $window = New-Object RECT
-                $client = New-Object RECT
-                [Win32]::GetWindowRect($handle, [ref]$window) | Out-Null
-                [Win32]::GetClientRect($handle, [ref]$client) | Out-Null
-                Write-Host "`t`twindow Left: $($window.Left), Top: $($window.Top), Right: $($window.Right), Bottom: $($window.Bottom)"
-                Write-Host "`t`tclient Left: $($client.Left), Top: $($client.Top), Right: $($client.Right), Bottom: $($client.Bottom)"
-            }
+            "`t`Getting window handle......" | Write-Verbose
+            "`t`tProcessId: $ProcessId handle: $handle" | Write-Verbose
+            $window = New-Object RECT
+            $client = New-Object RECT
+            [Win32]::GetWindowRect($handle, [ref]$window) > $null
+            [Win32]::GetClientRect($handle, [ref]$client) > $null
+            "`t`twindow Left: $($window.Left), Top: $($window.Top), Right: $($window.Right), Bottom: $($window.Bottom)" | Write-Verbose
+            "`t`tclient Left: $($client.Left), Top: $($client.Top), Right: $($client.Right), Bottom: $($client.Bottom)" | Write-Verbose
 
             # Draw it once far away, then draw it on its location. This makes the flicker less apparent
             $result = [Win32]::MoveWindow($handle, $Left, ($Top - 10000), $Width, $Height, $true) -and [Win32]::MoveWindow($handle, $Left, $Top, $Width, $Height, $true)
@@ -107,14 +102,12 @@ function Position-ResizeWindow {
 
         # Stop looping if we failed too many times
         if ($loopCount -eq 100) {
-            if ($DebugLevel -band 1) {
-                Write-Host "We took too many loops ($loopCount) and $( $loopCount * $SleepMilliseconds )ms to position and resize a window." -ForegroundColor Yellow
-            }
+            "We took too many loops ($loopCount) and $( $loopCount * $SleepMilliseconds )ms to position and resize a window." | Write-Verbose
             break
         }
     }
     if (!$result) {
-        Write-Host "Failed to get window handle! Loop count: $loopCount"
+        "Failed to get window handle! Loop count: $loopCount" | Write-Verbose
     }
 
     $false
