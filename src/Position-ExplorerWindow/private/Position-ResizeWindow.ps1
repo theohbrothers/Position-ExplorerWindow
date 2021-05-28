@@ -1,23 +1,23 @@
 function Position-ResizeWindow {
     Param(
         [Parameter(Mandatory=$True,Position=0)]
-		#[ValidateRange(0, [int]::MaxValue)]
+        #[ValidateRange(0, [int]::MaxValue)]
         [int]$ProcessId
     ,
         [Parameter(Mandatory=$True,Position=1)]
-		#[ValidateRange([int]::MinValue, [int]::MaxValue)]
+        #[ValidateRange([int]::MinValue, [int]::MaxValue)]
         [int]$Left
     ,
         [Parameter(Mandatory=$True,Position=2)]
-		#[ValidateRange([int]::MinValue, [int]::MaxValue)]
+        #[ValidateRange([int]::MinValue, [int]::MaxValue)]
         [int]$Top
     ,
         [Parameter(Mandatory=$True,Position=3)]
-		#[ValidateRange([int]::MinValue, [int]::MaxValue)]
+        #[ValidateRange([int]::MinValue, [int]::MaxValue)]
         [int]$Width
     ,
         [Parameter(Mandatory=$True,Position=4)]
-		#[ValidateRange([int]::MinValue, [int]::MaxValue)]
+        #[ValidateRange([int]::MinValue, [int]::MaxValue)]
         [int]$Height
     )
 
