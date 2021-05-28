@@ -366,7 +366,7 @@ function Position-ExplorerWindow {
                     # Try and reposition and resize Window
                     Write-Host "`tRepositioning and Resizing window..." -ForegroundColor Green
 
-                    $success = Position-ResizeWindow -ProcessId $childPid -Left $windowPosition['left'] -Top $windowPosition['top'] -Width $windowPosition['widtn'] -Height $windowPosition['height'] -DebugLevel $DebugLevel
+                    $success = Position-ResizeWindow -ProcessId $childPid -Left $windowPosition['left'] -Top $windowPosition['top'] -Width $windowPosition['width'] -Height $windowPosition['height'] -DebugLevel $DebugLevel
                     if ($success) {
                         Write-Host "`tSuccessfully repositioned and resized window." -ForegroundColor Green
 
