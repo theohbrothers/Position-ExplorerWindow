@@ -1,4 +1,5 @@
 function Position-ResizeWindow {
+    [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$True,Position=0)]
         #[ValidateRange(0, [int]::MaxValue)]
@@ -39,7 +40,7 @@ function Position-ResizeWindow {
     # http://www.pinvoke.net/default.aspx/user32.getclientrect
     # http://www.pinvoke.net/default.aspx/user32.movewindow
     # https://gist.github.com/coldnebo/1148334
-    Add-Type '
+    $added = Add-Type '
         using System;
         using System.Runtime.InteropServices;
 
@@ -64,18 +65,24 @@ function Position-ResizeWindow {
             public int Right;       // x position of lower-right corner
             public int Bottom;      // y position of lower-right corner
         }
-    '
+    ' -PassThru
+
+    if (!$added) {
+        throw "Failed to load assemblies: System; System.Runtime.InteropServices"
+    }
 
     # Keep trying to move the window until we are successful.
     if ($DebugLevel -band 1) { Write-Host "`t`tAttempting to move window......" -ForegroundColor Yellow }
-    $x = 0
+    $result = $null
+    $loopCount = 0
+    $SleepMilliseconds = 10
     while (!$result) {
-        $SleepMilliseconds = 10
-        $x++
+        $loopCount++
 
-        # Get et the process handle
-        $handle = (Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Id -eq $ProcessId } | Select-Object -First 1).MainWindowHandle
-        if ($handle) {
+        # Get the process handle
+        $process = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Id -eq $ProcessId } | Select-Object -First 1
+        if ($process) {
+            $handle = $process.MainWindowHandle
             # Debug
             if ($DebugLevel -band 1) {
                 Write-Host "`t`Getting window handle......" -ForegroundColor Yellow
@@ -94,19 +101,20 @@ function Position-ResizeWindow {
                 # Successfully moved and sized window
                 return $true
             }
-
-            # Stop looping if we failed too many times
-            if ($x -gt 100) {
-                if ($DebugLevel -band 1) {
-                    Write-Host "We took too many loops($x) and $( $x * $SleepMilliseconds )ms to position and resize a window." -ForegroundColor Yellow
-                }
-                break
-            }
         }
+
         Start-Sleep -Milliseconds $SleepMilliseconds
+
+        # Stop looping if we failed too many times
+        if ($loopCount -eq 100) {
+            if ($DebugLevel -band 1) {
+                Write-Host "We took too many loops ($loopCount) and $( $loopCount * $SleepMilliseconds )ms to position and resize a window." -ForegroundColor Yellow
+            }
+            break
+        }
     }
     if (!$result) {
-        Write-Host "Failed to get window handle! Loop count: $x"
+        Write-Host "Failed to get window handle! Loop count: $loopCount"
     }
 
     $false
