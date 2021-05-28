@@ -175,10 +175,6 @@ function Position-ExplorerWindow {
         [Parameter(Mandatory=$False,Position=9)]
         [ValidateSet('X', 'Y')]
         [String]$Flow = 'Y'
-    ,
-        [Parameter(Mandatory=$False,Position=10)]
-        #[ValidateRange(0, 1)]
-        [Int]$DebugLevel = 0
     )
 
     begin {
@@ -226,7 +222,7 @@ function Position-ExplorerWindow {
             }
 
             # Detect get the Main Monitor's resolution
-            Write-Host "`n[Detecting Main Monitor Resolution]" -ForegroundColor Cyan
+            "`n[Detecting Main Monitor Resolution]" | Write-Verbose
             $mainMonitor = $screens | Where-Object { $_.Primary } | Select-Object -First 1
             if (!$mainMonitor) {
                 $DestinationScreenWidth = $mainMonitorWidth = 1920
@@ -238,7 +234,7 @@ function Position-ExplorerWindow {
                 #$mainMonitorHeight = $mainMonitor.Bounds.Height
                 $mainMonitorWidth = $mainMonitor.WorkingArea.Width
                 $mainMonitorHeight = $mainMonitor.WorkingArea.Height
-                Write-Host "Main Monitor Resolution: $mainMonitorWidth x $mainMonitorHeight" -ForegroundColor Green
+                "Main Monitor Resolution: $mainMonitorWidth x $mainMonitorHeight" | Write-Verbose
 
                 # In simple mode, consider the destination screen (i.e. pixel pool) to be the same as the main monitor's resolution
                 if ($ModeEasy) {
@@ -252,21 +248,20 @@ function Position-ExplorerWindow {
             # Doesn't work on Windows 7 PSv2
             #$numMonitors = (Get-WmiObject WmiMonitorID -Namespace root\wmi).Count
 
-            Write-Host "[Position-ExplorerWindow options]" -ForegroundColor Cyan
-            Write-Host "Paths: " -ForegroundColor Green
-            $Paths | ForEach-Object { Write-Host " $($_.Trim())" -ForegroundColor Green }
-            Write-Host "DestinationScreenWidth: $DestinationScreenWidth" -ForegroundColor Green
-            Write-Host "DestinationScreenHeight: $DestinationScreenHeight" -ForegroundColor Green
-            Write-Host "DestinationMonitor: $DestinationMonitor" -ForegroundColor Green
-            Write-Host "Rows: $Rows" -ForegroundColor Green
-            Write-Host "Cols: $Cols" -ForegroundColor Green
-            Write-Host "ForegroundColor: $OffsetLeft" -ForegroundColor Green
-            Write-Host "OffsetTop: $OffsetTop" -ForegroundColor Green
-            Write-Host "Flow: $Flow" -ForegroundColor Green
-            Write-Host "Debug: $DebugLevel" -ForegroundColor Green
+            "[Position-ExplorerWindow options]" | Write-Verbose
+            "Paths: " | Write-Verbose
+            $Paths | ForEach-Object { " $($_.Trim())" } | Write-Verbose
+            "DestinationScreenWidth: $DestinationScreenWidth" | Write-Verbose
+            "DestinationScreenHeight: $DestinationScreenHeight" | Write-Verbose
+            "DestinationMonitor: $DestinationMonitor" | Write-Verbose
+            "Rows: $Rows" | Write-Verbose
+            "Cols: $Cols" | Write-Verbose
+            "ForegroundColor: $OffsetLeft" | Write-Verbose
+            "OffsetTop: $OffsetTop" | Write-Verbose
+            "Flow: $Flow" | Write-Verbose
 
             # Determine the Window Group Starting Position, each window's dimension
-            Write-Host "`n[Calculating Window Group Starting Position, each window's dimension]" -ForegroundColor Cyan
+            "`n[Calculating Window Group Starting Position, each window's dimension]" | Write-Verbose
 
             $params = @{
                 Paths = $Paths
@@ -281,16 +276,15 @@ function Position-ExplorerWindow {
                 OffsetLeft = $OffsetLeft
                 OffsetTop = $OffsetTop
                 Flow = $Flow
-                DebugLevel = $DebugLevel
             }
             $windowPositions = Get-WindowPositions @params
             foreach ($windowPosition in $windowPositions) {
                 # Path count
-                Write-Host "`n[Opening Windows]" -ForegroundColor Cyan
+                "[Opening Windows]" | Write-Verbose
 
                 # Debug
-                Write-Host "`tMy Coordinates (left, top): ($( $windowPosition['left'] ), $( $windowPosition['top'] )))"
-                if ($DebugLevel -band 1) { Write-Host "`tMy Dimensions (width, height): $( $windowPosition['width'] ) x $( $windowPosition['height'] )" }
+                "My Coordinates (left, top): ($( $windowPosition['left'] ), $( $windowPosition['top'] )))" | Write-Verbose
+                "My Dimensions (width, height): $( $windowPosition['width'] ) x $( $windowPosition['height'] )" | Write-Verbose
 
                 # We are going to use difference objects of explorer.exe
 
@@ -301,24 +295,29 @@ function Position-ExplorerWindow {
                 # explorer.exe: https://ss64.com/nt/explorer.html
                 # Note: A newly started explorer.exe subsequently spawns a child explorer.exe before killing itself.
                 # Start a new explorer.exe process and get its pid
-                Write-Host "`tStarting Explorer process..." -ForegroundColor Yellow
+                "Starting Explorer process..." | Write-Verbose
                 $parent = Start-Process -FilePath explorer -ArgumentList "/separate,`"$( $windowPosition['path'] )`"" -PassThru
                 $parentPid = $parent.Id
 
                 # Skip over this path if we didn't get a newly started explorer.exe
-                if (!$parentPid) { Write-Warning "Could not find parent explorer.exe. Skipping."; Continue }
+                if (!$parentPid) {
+                    Write-Warning "Could not find parent explorer.exe. Skipping."
+                    continue
+                }
 
                 # Get the explorer processes before launching
-                Write-Host "`tGetting Explorer processes..." -ForegroundColor Yellow
-                $processesPrev = Get-Process -Name explorer -ErrorAction SilentlyContinue
+                "Getting Explorer processes..." | Write-Verbose
 
                 # Skip over this path if we didn't get any explorer instances.
-                if (!$processesPrev) { Write-Warning "Could not find parent explorer.exe. Skipping."; continue }
-                if ($DebugLevel -band 1) { $processesPrev | Format-Table | Out-String | % { Write-Host $_.Trim() } }
-
+                $processesPrev = Get-Process -Name explorer -ErrorAction SilentlyContinue
+                if (!$processesPrev) {
+                    Write-Warning "Could not find parent explorer.exe. Skipping.";
+                    continue
+                }
+                $processesPrev | Format-Table | Out-String | % { $_.Trim() } | Write-Verbose
 
                 # Get the pid of the spawned child explorer.exe. This is achieved by getting a diff-object of explorer.exe processes until we find the spawned child's pid
-                Write-Host "`tGetting spawned child process..." -ForegroundColor Yellow
+                "Getting spawned child process..." | Write-Verbose
 
                 # Loop count
                 $childPid = $null
@@ -328,9 +327,9 @@ function Position-ExplorerWindow {
                     $loopCount++
 
                     # Get explorer processes after starting the new explorer process
-                    if ($DebugLevel -band 1) { Write-Host "`t`tGetting Explorer processes..." -ForegroundColor Yellow }
+                    "`t`tGetting Explorer processes..." | Write-Verbose
                     $processesAfter = Get-Process -Name explorer -ErrorAction SilentlyContinue
-                    if ($DebugLevel -band 1) { $processesAfter | Format-Table | Out-String | Write-Host }
+                    $processesAfter | Format-Table | Out-String | Write-Verbose
 
                     # Get the child process id from the difference object between two collections of explorer.exe
                     # E.g.
@@ -340,20 +339,18 @@ function Position-ExplorerWindow {
                     if ($diff) {
                         $childPid = $diff.Id
                     }
-                    if ($DebugLevel -band 1) { Write-Host "`t`t >Diff: $childPid" }
+                    "`t`t >Diff: $childPid" | Write-Verbose
 
                     # Successfully found a child process id. Print a message
                     if ($childPid) {
-                        if ($DebugLevel -band 1) { Write-Host "`tWe took $loopCount loops to get the child process id: $childPid" -ForegroundColor Green }
-                        Write-Host "`tWe found the child process" -ForegroundColor Green
+                        "`tWe took $loopCount loops to get the child process id: $childPid" | Write-Verbose
+                        "`tWe found the child process" | Write-Verbose
                     }else {
                         Start-Sleep -Milliseconds $SleepMilliseconds
 
                         # Stop looping if we can't find it
                         if ($loopCount -eq 100) {
-                            if ($DebugLevel -band 1) {
-                                Write-Host "We took too many loops($loopCount) and $( $loopCount * $SleepMilliseconds )ms and to find the child explorer process." -ForegroundColor Yellow
-                            }
+                            "We took too many loops($loopCount) and $( $loopCount * $SleepMilliseconds )ms and to find the child explorer process." | Write-Verbose
                             break
                         }
                     }
@@ -364,11 +361,11 @@ function Position-ExplorerWindow {
                     Start-Sleep -Milliseconds 100
 
                     # Try and reposition and resize Window
-                    Write-Host "`tRepositioning and Resizing window..." -ForegroundColor Green
+                    "`tRepositioning and Resizing window..." | Write-Verbose
 
-                    $success = Position-ResizeWindow -ProcessId $childPid -Left $windowPosition['left'] -Top $windowPosition['top'] -Width $windowPosition['width'] -Height $windowPosition['height'] -DebugLevel $DebugLevel
+                    $success = Position-ResizeWindow -ProcessId $childPid -Left $windowPosition['left'] -Top $windowPosition['top'] -Width $windowPosition['width'] -Height $windowPosition['height']
                     if ($success) {
-                        Write-Host "`tSuccessfully repositioned and resized window." -ForegroundColor Green
+                        "`tSuccessfully repositioned and resized window." | Write-Verbose
 
                         # increment cursor
                         $i++

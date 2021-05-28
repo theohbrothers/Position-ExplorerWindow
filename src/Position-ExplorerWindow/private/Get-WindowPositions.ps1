@@ -106,10 +106,9 @@ function Get-WindowPositions {
         # Determine each window's dimension
         $my_width = [math]::Floor( $DestinationScreenWidth / $Cols )   # e.g. 1920 / 2
         $my_height = [math]::Floor( $DestinationScreenHeight / $Rows ) # e.g. 1080 / 4
-        Write-Host "NOTE: Origin (0, 0) is the Top-Left Corner of your Main Monitor." -ForegroundColor Green
-
-        Write-Host "Starting Coordinates (left, top): ($left, $top)" -ForegroundColor Green
-        Write-Host "Window Dimensions (width x height): $my_width x $my_height" -ForegroundColor Green
+        "NOTE: Origin (0, 0) is the Top-Left Corner of your Main Monitor." | Write-Verbose
+        "Starting Coordinates (left, top): ($left, $top)" | Write-Verbose
+        "Window Dimensions (width x height): $my_width x $my_height" | Write-Verbose
 
         # WindowPosition collection
         $windowPositions = @()
@@ -127,7 +126,7 @@ function Get-WindowPositions {
             # Determine window position
             switch ($Flow) {
                 'Y' {
-                    if ($DebugLevel -band 1) { Write-Host '`tFlow is Y. Calculating coordinates for this window...' }
+                    'Flow is Y. Calculating coordinates for this window...' | Write-Verbose
                     # Top-Down
                     # If reached max number of rows: reset the cursor to Starting Position y coordinate, and get next left position
                     if ($c -eq $Rows) {
@@ -137,7 +136,7 @@ function Get-WindowPositions {
                     $my_top = $top + ($my_height * $c)
                 }
                 'X' {
-                    if ($DebugLevel -band 1) { Write-Host '`tFlow is Y. Calculating coordinates for this window...' }
+                   'Flow is Y. Calculating coordinates for this window...' | Write-Verbose
                     # Left-to-Right
                     # If reached max number of cols: reset the cursor to Starting Position x coordinate, and get next top position
                     if ($c -eq $Cols) {
