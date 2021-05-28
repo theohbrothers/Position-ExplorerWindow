@@ -19,6 +19,10 @@ function Position-ResizeWindow {
         [Parameter(Mandatory=$True,Position=4)]
         #[ValidateRange([int]::MinValue, [int]::MaxValue)]
         [int]$Height
+    ,
+        [Parameter(Mandatory=$False,Position=10)]
+        #[ValidateRange(0, 1)]
+        [int]$DebugLevel = 0
     )
 
     # NOTE: No longer using UIAutomation Module.
