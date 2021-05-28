@@ -58,31 +58,29 @@ Q: System requirements?
 - Windows 7 and up
 - Powershell v2
 
-Q: Help! When I right-click the script and click *'Run with Powershell'*, it opens and closes in a split second. What's going on?
-- You probably are seeing a *red colored error message* in the window just before it disappears. You need to allow the execution of unverified scripts. Open Powershell as administrator, type `Set-ExecutionPolicy Unrestricted -Force` and press ENTER. Try running the script again. You can easily restore the security setting back by using `Set-ExecutionPolicy Undefined -Force`.
-
 Q: I want to open multiple sets of windows quickly. How do I do that?
-- Simply make a copy of the usage script above for each set of *Explorer* windows you want to open. Configure each script with a set of `$Paths`. Keep the scripts on your Desktop. You can now easily run those scripts, by right-clicking and selecting *'Run with Powershell'*.
-Alternatively, as seen in this demo, you can *pin Powershell onto your Taskbar*, then *pin those scripts* by dragging and dropping over the Powershell on the Taskbar. Now you can easily run them by right-clicking on Powershell, and clicking the script.
+
+Simply make a copy of the usage script above for each set of `Explorer` windows you want to open. Configure each script with a set of `Paths`. Keep the scripts on your Desktop. You can now easily run those scripts, by right-clicking and selecting `Run with Powershell`.
+
+Alternatively, as seen in this demo, you can pin `Powershell` onto your Taskbar, then pin your scripts by dragging and dropping over the Powershell on the Taskbar. Now you can easily run them by right-clicking on Powershell, and clicking the script.
+
 ![Pin Demo](https://github.com/theohbrothers/Position-ExplorerWindow/raw/master/images/pin-demo.gif "Demo of Position-ExplorerWindow")
 
 Q: Help! the Taskbar is overlapping some of my Explorer windows!
-- You are probably an advanced user, using `$ModeEasy = 0`. A Taskbar with a single row of icons is often 40 pixels high (if at top or bottom) or 62 pixels wide (if at left or right). So:
-    > If your Taskbar is on the **bottom**, reduce the `$DestinationScreenHeight` by 40. <br />
-    If your Taskbar is on the **top**, reduce the `DestinationScreenHeight` by 40, and increase `$OffsetTop` by 40. <br />
-    If your Taskbar is on the **left**, reduce the `DestinationScreenWidth` by 62, and increase `$OffsetLeft` by 62.  <br />
-    If your Taskbar is on the **right**, reduce the `DestinationScreenWidth` by 62, and reduce `$OffsetLeft` by 62.
-    >
-    p.s. If your Taskbar is has *two or more rows* of icons, then change the above by multiples of 40 or 62.
 
-Q: Help! Upon running the script I am getting an error <code>'File C:\...Position-ExplorerWindow.ps1 cannot be loaded because the execution of scripts is disabled on this system. Please see "get-help about_signing" for more details.'</code>
-- You need to allow the execution of unverified scripts. Open Powershell as administrator, type <code>Set-ExecutionPolicy Unrestricted -Force</code> and press ENTER. Try running the script again. You can easily restore the security setting back by using <code>Set-ExecutionPolicy Undefined -Force</code>.
+You are probably an advanced user, and are not using `-ModeEasy`. A Taskbar with a single row of icons is often 40 pixels high (if at top or bottom) or 62 pixels wide (if at left or right). So:
 
-Q: Help! Upon running the script I am getting an error <code>File C:\...Position-ExplorerWindows.ps1 cannot be loaded. The file C:\...\Position-ExplorerWindows.ps1 is not digitally signed. You cannot run this script on the current system. For more information about running scripts and setting execution policy, see about_Execution_Policies at http://go.microsoft.com/fwlink/?LinkID=135170.</code>
-- You need to allow the execution of unverified scripts. Open Powershell as administrator, type <code>Set-ExecutionPolicy Unrestricted -Force</code> and press ENTER. Try running the script again. You can easily restore the security setting back by using <code>Set-ExecutionPolicy Undefined -Force</code>.
+- If your Taskbar is on the **bottom**, reduce the `-DestinationScreenHeight` by 40. <br />
+- If your Taskbar is on the **top**, reduce the `-DestinationScreenHeight` by 40, and increase `-OffsetTop` by 40. <br />
+- If your Taskbar is on the **left**, reduce the `-DestinationScreenWidth` by 62, and increase `-OffsetLeft` by 62.  <br />
+- If your Taskbar is on the **right**, reduce the `-DestinationScreenWidth` by 62, and reduce `-OffsetLeft` by 62.
 
-Q: Help! Upon running the script I am getting a warning <code>'Execution Policy change. The execution policy helps protect you from scripts that you do not trust. Changing the execution policy might expose you to the security risks described in the about_Execution_Policies help topic at http://go.microsoft.com/?LinkID=135170. Do you want to change the execution policy?</code>
-- You need to allow the execution of unverified scripts. Type <code>Y</code> for yes and press enter. You can easily restore the security setting back opening Powershell as administrator, and using the code <code>Set-ExecutionPolicy Undefined -Force</code>.
+
+p.s. If your Taskbar is has *two or more rows* of icons, then change the above by multiples of 40 or 62.
+
+Q: Why are there gaps between windows?
+
+It's likely you have Windows Aero active, since it is turned on by default on Windows 7 and above. When Aero is active, a window's dimensions includes window borders and shadow effects. Aero theme makes shadow regions around a window transparent, hence creating "gaps".
 
 ## Background
 
