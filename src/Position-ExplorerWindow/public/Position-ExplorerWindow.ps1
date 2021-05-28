@@ -137,7 +137,7 @@ function Position-ExplorerWindow {
     ################################################################################################################################
     #>
     [CmdletBinding()]
-	Param(
+    Param(
         [Parameter(Mandatory=$False,Position=0)]
         [switch]$ModeEasy
     ,
@@ -146,38 +146,38 @@ function Position-ExplorerWindow {
     ,
         [Parameter(Mandatory=$False,Position=2)]
         #[ValidateRange(640, [int]::MaxValue)]
-		[Int]$DestinationScreenWidth
-	,
+        [Int]$DestinationScreenWidth
+    ,
         [Parameter(Mandatory=$False,Position=3)]
         #[ValidateRange(360, [int]::MaxValue)]
-		[Int]$DestinationScreenHeight
-	,
+        [Int]$DestinationScreenHeight
+    ,
         [Parameter(Mandatory=$False,Position=4)]
         [ValidateSet('M', 'L', 'R', 'T', 'B')]
-		[String]$DestinationMonitor = 'M'
-	,
+        [String]$DestinationMonitor = 'M'
+    ,
         [Parameter(Mandatory=$False,Position=5)]
-		#[ValidateRange(1, [int]::MaxValue)]
-		[Int]$Rows = 4
-	,
+        #[ValidateRange(1, [int]::MaxValue)]
+        [Int]$Rows = 4
+    ,
         [Parameter(Mandatory=$False,Position=6)]
-		#[ValidateRange(1, [int]::MaxValue)]
+        #[ValidateRange(1, [int]::MaxValue)]
         [Int]$Cols = 2
-	,
+    ,
         [Parameter(Mandatory=$False,Position=7)]
-		#[ValidateRange(0, [int]::MaxValue)]
-		[Int]$OffsetLeft = 0
-	,
+        #[ValidateRange(0, [int]::MaxValue)]
+        [Int]$OffsetLeft = 0
+    ,
         [Parameter(Mandatory=$False,Position=8)]
-		#[ValidateRange(0, [int]::MaxValue)]
-		[Int]$OffsetTop = 0
-	,
+        #[ValidateRange(0, [int]::MaxValue)]
+        [Int]$OffsetTop = 0
+    ,
         [Parameter(Mandatory=$False,Position=9)]
-		[ValidateSet('X', 'Y')]
-		[String]$Flow = 'Y'
-	,
+        [ValidateSet('X', 'Y')]
+        [String]$Flow = 'Y'
+    ,
         [Parameter(Mandatory=$False,Position=10)]
-		#[ValidateRange(0, 1)]
+        #[ValidateRange(0, 1)]
         [Int]$DebugLevel = 0
     )
 
