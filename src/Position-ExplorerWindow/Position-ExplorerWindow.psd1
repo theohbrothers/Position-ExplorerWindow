@@ -30,7 +30,7 @@ CompanyName = 'The Oh Brothers'
 Copyright = '(c) 2017 The Oh Brothers'
 
 # Description of the functionality provided by this module
-Description = 'Opens, resizes, and arranges multiple `Explorer` windows at specified paths in a grid fashion to fit a screen, or multiple screens.'
+Description = 'Opens, resizes, and arranges multiple Explorer windows at specified paths in a grid fashion to fit a screen, or multiple screens.'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '2.0'
