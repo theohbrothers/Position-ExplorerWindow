@@ -9,7 +9,7 @@
     Author = 'The Oh Brothers'
     CompanyName = 'The Oh Brothers'
     Copyright = '(c) 2017 The Oh Brothers'
-    Description = 'Opens, resizes, and arranges multiple `Explorer` windows at specified paths in a grid fashion to fit a screen, or multiple screens.'
+    Description = 'Opens, resizes, and arranges multiple Explorer windows at specified paths in a grid fashion to fit a screen, or multiple screens.'
     PowerShellVersion = '2.0'
     # PowerShellHostName = ''
     # PowerShellHostVersion = ''
