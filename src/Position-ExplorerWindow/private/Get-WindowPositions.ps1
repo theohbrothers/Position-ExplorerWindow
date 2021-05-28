@@ -36,9 +36,6 @@ function Get-WindowPositions {
     ,
         [Parameter(Mandatory=$true)]
         [string]$Flow
-    ,
-        [Parameter(Mandatory=$false)]
-        [int]$DebugLevel
     )
 
     process {

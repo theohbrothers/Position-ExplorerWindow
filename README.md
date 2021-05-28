@@ -43,7 +43,6 @@ $params = @{
     'OffsetLeft' = 0
     'OffsetTop' = 0
     'Flow' = 'Y'
-    'DebugLevel' = 0
 }
 # Call with params splatting
 Position-ExplorerWindow @params

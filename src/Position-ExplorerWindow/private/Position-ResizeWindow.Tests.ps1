@@ -12,7 +12,6 @@ Describe "Position-ResizeWindow" -Tag 'Unit' {
             Top = 0
             Width = 999
             Height = 333
-            DebugLevel = 0
         }
 
         It 'Errors without required assemblies' {
