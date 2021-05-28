@@ -4,23 +4,10 @@ function Position-ExplorerWindow {
     Opens, resizes, and arranges multiple Explorer Windows at specified paths in a grid fashion to fit a screen, or multiple screens.
 
     .DESCRIPTION
-    This script / module has the ability to quickly open multiple Explorer Windows at specified paths in an grid, arranging them to fit a screen, or multiple screens (no limit, really), in a predictable and orderly fashion.
-    All you have to do is to add the folders into the script config, and run the script, and you get a grid of Explorer windows.
-    This is most useful when working with half a dozen or more folders simultaneously, because it saves time and effort rearranging and fitting Explorer Windows into a nice and orderly fashion, so that they can be easily accessed.
-
-    Background: An Explorer window cannot be opened at a specified coordinate on the screen through its command line. Because the author could not find any working solution that could conveniently open multiple Explorer windows in specified folders arranged in a predictable and orderly fashion on the screen, there had to be a tool that could do this.
+    Opens, resizes, and arranges multiple Explorer Windows at specified paths in a grid fashion to fit a screen, or multiple screens.
 
     .PARAMETER Paths
     # Defines the paths (folders) the Explorer windows should show.
-    # Enter one path per line. Edit between the single-quotes.
-    # E.g.  $Paths = '
-    #           D:\My Data Folder\Data1
-    #           D:\My Data Folder\Data2
-    #           D:\My Data Folder\Data3
-    #           D:\My Data Folder\Data4
-    #           \\MYSERVER\public
-    #           \\192.168.0.1\\share
-    #       '
 
     .PARAMETER ModeEasy
     # Simple Mode. In this mode, most defaults are used.
@@ -97,11 +84,6 @@ function Position-ExplorerWindow {
     #       | 2 | 4 |
     #       ---------
     # Default: 'Y'
-
-    .PARAMETER DebugLevel
-    # Debug level
-    # 0 - Off
-    # 1 - On
 
     .EXAMPLE
     Example 1a: This opens 4 windows: all 4 windows stacked vertically, occupying a total of half your Main full-HD Screen.
