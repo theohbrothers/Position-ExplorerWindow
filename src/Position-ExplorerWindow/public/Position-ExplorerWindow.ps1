@@ -198,7 +198,9 @@ function Position-ExplorerWindow {
             # The returned screen objects appears to be in order of the physical position of the monitors, from left to right,
             #  regardless of what the monitor's ID in Control Panel's / Settings 'Identify' feature shows.
             if (Add-Type -AssemblyName System.Windows.Forms -PassThru) {
-                $screens = Get-AllScreens
+                $screens = @(
+                    Get-AllScreens
+                )
             }else {
                 throw "Failed to load assembly: System.Windows.Forms"
             }
