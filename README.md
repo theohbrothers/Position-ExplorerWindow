@@ -1,6 +1,6 @@
 # Position-ExplorerWindow
 
-[![github-actions](https://github.com/theohbrothers/Position-ExplorerWindow/workflows/ci-master-pr/badge.svg)](https://github.com/theohbrothers/Position-ExplorerWindow/actions)
+[![github-actions](https://github.com/theohbrothers/Position-ExplorerWindow/actions/workflows/ci-master-pr.yml/badge.svg?branch=master)](https://github.com/theohbrothers/Position-ExplorerWindow/actions/workflows/ci-master-pr.yml)
 [![github-release](https://img.shields.io/github/v/release/theohbrothers/Position-ExplorerWindow?style=flat-square)](https://github.com/theohbrothers/Position-ExplorerWindow/releases/)
 [![powershell-gallery-release](https://img.shields.io/powershellgallery/v/Position-ExplorerWindow?logo=powershell&logoColor=white&label=PSGallery&labelColor=&style=flat-square)](https://www.powershellgallery.com/packages/Position-ExplorerWindow/)
 

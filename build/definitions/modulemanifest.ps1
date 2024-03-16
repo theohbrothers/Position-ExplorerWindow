@@ -23,7 +23,7 @@
     # FormatsToProcess = @()
     # NestedModules = @()
     FunctionsToExport = @(
-        Get-ChildItem $PSScriptRoot/../../../src/Position-ExplorerWindow/public -Exclude *.Tests.ps1 | % { $_.BaseName }
+        Get-ChildItem $PSScriptRoot/../../src/Position-ExplorerWindow/public -Exclude *.Tests.ps1 | % { $_.BaseName }
     )
     CmdletsToExport = @()
     VariablesToExport = @()
