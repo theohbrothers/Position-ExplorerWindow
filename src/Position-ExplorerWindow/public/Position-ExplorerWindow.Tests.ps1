@@ -4,24 +4,6 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 
 Describe "Position-ExplorerWindow" -Tag 'Unit' {
 
-    Context 'Powershell versions' {
-
-        It 'Runs only on Powershell <= v5' {
-            $paths = @(
-                'foo'
-                'bar'
-            )
-            $errorAction = 'Stop'
-
-            if ($PSVersionTable.PSVersion.Major -gt 5) {
-                { Position-ExplorerWindow -Paths $paths 3>$null 6>$null -ErrorAction $errorAction } | Should -Throw
-            }else {
-                { Position-ExplorerWindow -Paths $paths 3>$null 6>$null -ErrorAction $errorAction } | Should -Not -Throw
-            }
-        }
-
-    }
-
     Context 'Parameters' {
 
         function Get-PowershellVersion { 5 }
@@ -70,6 +52,20 @@ Describe "Position-ExplorerWindow" -Tag 'Unit' {
             # }
         }
         function Position-ResizeWindow {}
+
+        It 'Runs only on Powershell <= v5' {
+            $paths = @(
+                'foo'
+                'bar'
+            )
+            $errorAction = 'Stop'
+
+            if ($PSVersionTable.PSVersion.Major -gt 5) {
+                { Position-ExplorerWindow -Paths $paths 3>$null 6>$null -ErrorAction $errorAction } | Should -Throw
+            }else {
+                { Position-ExplorerWindow -Paths $paths 3>$null 6>$null -ErrorAction $errorAction } | Should -Not -Throw
+            }
+        }
 
         It 'Errors without required assemblies' {
             $params = @{
